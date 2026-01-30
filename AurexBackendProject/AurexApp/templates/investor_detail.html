@@ -1,0 +1,632 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    :root {
+        --primary-dark: #203248;
+        --accent-red: #a8042b;
+        --white: #ffffff;
+        --light-gray: #f8f9fa;
+        --border-color: #e5e7eb;
+        --text-primary: #1f2937;
+        --text-secondary: #6b7280;
+        --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .investor-detail-container {
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    /* BACK BUTTON */
+    .back-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+        text-decoration: none;
+        font-weight: 600;
+        color: var(--accent-red);
+        font-size: 0.9rem;
+        transition: var(--transition);
+        padding: 0.5rem 0;
+    }
+
+    .back-btn:hover {
+        gap: 0.75rem;
+        color: #8a0623;
+    }
+
+    /* HEADER */
+    .investor-header {
+        background: linear-gradient(135deg, var(--primary-dark) 0%, #2a4a66 100%);
+        color: white;
+        padding: 1.5rem;
+        border-radius: 12px;
+        margin-bottom: 1rem;
+        box-shadow: var(--shadow-md);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .investor-header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -20%;
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(circle, rgba(168, 4, 43, 0.2) 0%, transparent 70%);
+        border-radius: 50%;
+    }
+
+    .investor-header::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, var(--accent-red) 0%, transparent 100%);
+    }
+
+    .header-content {
+        position: relative;
+        z-index: 1;
+    }
+
+    .investor-header h1 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        letter-spacing: -0.3px;
+    }
+
+    .header-meta {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+        opacity: 0.95;
+    }
+
+    .meta-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        padding: 0.375rem 0.75rem;
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    /* CONTENT GRID */
+    .content-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    /* SECTION */
+    .section {
+        background: var(--white);
+        padding: 1.25rem;
+        border-radius: 12px;
+        box-shadow: var(--shadow-sm);
+        border: 1px solid var(--border-color);
+        transition: var(--transition);
+        margin-bottom: 1rem;
+    }
+
+    .section:hover {
+        box-shadow: var(--shadow-md);
+        border-color: var(--accent-red);
+    }
+
+    .section-header {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.875rem;
+        padding-bottom: 0.625rem;
+        border-bottom: 2px solid var(--light-gray);
+    }
+
+    .section-icon {
+        font-size: 1.25rem;
+    }
+
+    .section h3 {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--primary-dark);
+        margin: 0;
+        letter-spacing: -0.2px;
+    }
+
+    /* INFO ROWS */
+    .info-item {
+        display: grid;
+        grid-template-columns: 140px 1fr;
+        gap: 0.75rem;
+        padding: 0.625rem 0;
+        border-bottom: 1px solid var(--light-gray);
+        align-items: start;
+    }
+
+    .info-item:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    .info-item:first-child {
+        padding-top: 0;
+    }
+
+    .info-label {
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .info-value {
+        font-size: 0.9rem;
+        color: var(--text-primary);
+        font-weight: 500;
+        word-break: break-word;
+    }
+
+    .info-value strong {
+        color: var(--primary-dark);
+        font-weight: 600;
+    }
+
+    .info-value a {
+        color: var(--accent-red);
+        text-decoration: none;
+        font-weight: 600;
+        transition: var(--transition);
+    }
+
+    .info-value a:hover {
+        text-decoration: underline;
+    }
+
+    /* BADGES */
+    .badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.375rem 0.75rem;
+        background: var(--light-gray);
+        border: 1.5px solid var(--border-color);
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--primary-dark);
+        margin: 0.25rem;
+        transition: var(--transition);
+    }
+
+    .badge:hover {
+        border-color: var(--accent-red);
+        background: linear-gradient(135deg, rgba(168, 4, 43, 0.05) 0%, transparent 100%);
+        transform: translateY(-1px);
+    }
+
+    .badge-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.25rem;
+        margin-top: 0.25rem;
+    }
+
+    /* TICKET HIGHLIGHT */
+    .ticket-highlight {
+        background: linear-gradient(135deg, rgba(168, 4, 43, 0.1) 0%, rgba(168, 4, 43, 0.05) 100%);
+        padding: 1rem;
+        border-radius: 10px;
+        text-align: center;
+        border: 2px solid rgba(168, 4, 43, 0.2);
+        margin-top: 0.75rem;
+    }
+
+    .ticket-label {
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        margin-bottom: 0.375rem;
+    }
+
+    .ticket-amount {
+        font-size: 1.75rem;
+        font-weight: 800;
+        color: var(--accent-red);
+        letter-spacing: -0.5px;
+    }
+
+    /* SIDEBAR SECTIONS */
+    .sidebar-section {
+        background: var(--white);
+        padding: 1rem;
+        border-radius: 12px;
+        box-shadow: var(--shadow-sm);
+        border: 1px solid var(--border-color);
+        margin-bottom: 1rem;
+    }
+
+    .sidebar-section h4 {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: var(--primary-dark);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 0.625rem;
+        display: flex;
+        align-items: center;
+        gap: 0.375rem;
+    }
+
+    .sidebar-item {
+        padding: 0.5rem 0;
+        border-bottom: 1px solid var(--light-gray);
+        font-size: 0.85rem;
+    }
+
+    .sidebar-item:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    .sidebar-item:first-child {
+        padding-top: 0;
+    }
+
+    .sidebar-label {
+        font-weight: 600;
+        color: var(--text-secondary);
+        font-size: 0.75rem;
+        display: block;
+        margin-bottom: 0.25rem;
+    }
+
+    .sidebar-value {
+        color: var(--text-primary);
+        font-weight: 500;
+    }
+
+    /* CATEGORY BADGE */
+    .category-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.375rem 0.875rem;
+        background: linear-gradient(135deg, rgba(168, 4, 43, 0.15) 0%, rgba(168, 4, 43, 0.1) 100%);
+        color: var(--accent-red);
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+        border: 1.5px solid rgba(168, 4, 43, 0.2);
+    }
+
+    /* ANIMATION */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .section, .sidebar-section {
+        animation: fadeIn 0.4s ease-out;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 968px) {
+        .content-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .info-item {
+            grid-template-columns: 120px 1fr;
+            gap: 0.5rem;
+        }
+    }
+
+    @media (max-width: 640px) {
+        .investor-header {
+            padding: 1.25rem;
+        }
+
+        .investor-header h1 {
+            font-size: 1.5rem;
+        }
+
+        .header-meta {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .info-item {
+            grid-template-columns: 1fr;
+            gap: 0.25rem;
+        }
+
+        .info-label {
+            font-size: 0.75rem;
+        }
+
+        .section {
+            padding: 1rem;
+        }
+
+        .ticket-amount {
+            font-size: 1.5rem;
+        }
+
+        .badge {
+            font-size: 0.75rem;
+            padding: 0.3rem 0.6rem;
+        }
+    }
+</style>
+
+<div class="investor-detail-container">
+    <!-- BACK BUTTON -->
+    <a href="javascript:history.back()" class="back-btn">
+        <span>←</span> Back
+    </a>
+
+    <!-- HEADER -->
+    <div class="investor-header">
+        <div class="header-content">
+            <h1>{{ investor.full_name }}</h1>
+            <div class="header-meta">
+                <span class="meta-badge">
+                    <span>💼</span> {{ investor.category }}
+                </span>
+                {% if investor.city %}
+                <span class="meta-badge">
+                    <span>📍</span> {{ investor.city }}
+                </span>
+                {% endif %}
+                {% if investor.experience %}
+                <span class="meta-badge">
+                    <span>⏱️</span> {{ investor.experience }}
+                </span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTENT GRID -->
+    <div class="content-grid">
+        <!-- MAIN CONTENT -->
+        <div>
+            <!-- INVESTOR INFORMATION -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-icon">👤</span>
+                    <h3>Investor Information</h3>
+                </div>
+                {% if investor.entity %}
+                <div class="info-item">
+                    <span class="info-label">Entity</span>
+                    <span class="info-value"><strong>{{ investor.entity }}</strong></span>
+                </div>
+                {% endif %}
+                {% if investor.designation %}
+                <div class="info-item">
+                    <span class="info-label">Designation</span>
+                    <span class="info-value">{{ investor.designation }}</span>
+                </div>
+                {% endif %}
+                <div class="info-item">
+                    <span class="info-label">Experience</span>
+                    <span class="info-value">{{ investor.experience }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Category</span>
+                    <span class="info-value">
+                        <span class="category-badge">{{ investor.category }}</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- INVESTMENT MANDATE -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-icon">🎯</span>
+                    <h3>Investment Mandate</h3>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Stages</span>
+                    <div class="info-value">
+                        <div class="badge-container">
+                            {% for s in investor.stages %}
+                                <span class="badge">{{ s }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Sectors</span>
+                    <div class="info-value">
+                        <div class="badge-container">
+                            {% for s in investor.sectors %}
+                                <span class="badge">{{ s }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Geography</span>
+                    <span class="info-value">{{ investor.geography }}</span>
+                </div>
+            </div>
+
+            <!-- INVESTMENT STYLE -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-icon">💼</span>
+                    <h3>Investment Style</h3>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Style</span>
+                    <span class="info-value">{{ investor.style }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Frequency</span>
+                    <span class="info-value">{{ investor.frequency }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Deployment</span>
+                    <span class="info-value">{{ investor.deployment }}</span>
+                </div>
+                <div class="ticket-highlight">
+                    <div class="ticket-label">Ticket Size</div>
+                    <div class="ticket-amount">{{ investor.ticket }}</div>
+                </div>
+            </div>
+
+            <!-- EXPERIENCE & PORTFOLIO -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-icon">📊</span>
+                    <h3>Experience & Portfolio</h3>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Previous Investor</span>
+                    <span class="info-value">{{ investor.previous }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Deal Count</span>
+                    <span class="info-value"><strong>{{ investor.count }}</strong></span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Portfolio</span>
+                    <span class="info-value">{{ investor.portfolio }}</span>
+                </div>
+            </div>
+
+            <!-- ENGAGEMENT & MOTIVATION -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-icon">🤝</span>
+                    <h3>Engagement & Motivation</h3>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Engagement</span>
+                    <div class="info-value">
+                        <div class="badge-container">
+                            {% for e in investor.engagement %}
+                                <span class="badge">{{ e }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Involvement</span>
+                    <span class="info-value">{{ investor.involvement }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Motivation</span>
+                    <div class="info-value">
+                        <div class="badge-container">
+                            {% for m in investor.motivation %}
+                                <span class="badge">{{ m }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">ESG Focus</span>
+                    <span class="info-value">{{ investor.esg }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- SIDEBAR -->
+        <div>
+            <!-- CONTACT DETAILS -->
+            <div class="sidebar-section">
+                <h4><span>📞</span> Contact Details</h4>
+                <div class="sidebar-item">
+                    <span class="sidebar-label">Email</span>
+                    <div class="sidebar-value">
+                        <a href="mailto:{{ investor.email }}" style="color: var(--accent-red); text-decoration: none; font-weight: 600; word-break: break-all;">{{ investor.email }}</a>
+                    </div>
+                </div>
+                <div class="sidebar-item">
+                    <span class="sidebar-label">Phone</span>
+                    <div class="sidebar-value">
+                        <a href="tel:{{ investor.phone }}" style="color: var(--primary-dark); text-decoration: none; font-weight: 600;">{{ investor.phone }}</a>
+                    </div>
+                </div>
+                {% if investor.linkedin %}
+                <div class="sidebar-item">
+                    <span class="sidebar-label">LinkedIn</span>
+                    <div class="sidebar-value">
+                        <a href="{{ investor.linkedin }}" target="_blank" style="color: var(--accent-red); text-decoration: none; font-weight: 600; word-break: break-all;">View Profile</a>
+                    </div>
+                </div>
+                {% endif %}
+                {% if investor.city %}
+                <div class="sidebar-item">
+                    <span class="sidebar-label">Location</span>
+                    <div class="sidebar-value">{{ investor.city }}</div>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- QUICK INFO -->
+            <div class="sidebar-section">
+                <h4><span>ℹ️</span> Quick Info</h4>
+                <div class="sidebar-item">
+                    <span class="sidebar-label">Category</span>
+                    <div class="sidebar-value">{{ investor.category }}</div>
+                </div>
+                <div class="sidebar-item">
+                    <span class="sidebar-label">Experience</span>
+                    <div class="sidebar-value">{{ investor.experience }}</div>
+                </div>
+                <div class="sidebar-item">
+                    <span class="sidebar-label">Ticket Size</span>
+                    <div class="sidebar-value" style="color: var(--accent-red); font-weight: 700;">{{ investor.ticket }}</div>
+                </div>
+            </div>
+
+            <!-- INVESTMENT FOCUS -->
+            <div class="sidebar-section">
+                <h4><span>🎯</span> Investment Focus</h4>
+                <div class="sidebar-item">
+                    <span class="sidebar-label">Geography</span>
+                    <div class="sidebar-value">{{ investor.geography }}</div>
+                </div>
+                <div class="sidebar-item">
+                    <span class="sidebar-label">Style</span>
+                    <div class="sidebar-value">{{ investor.style }}</div>
+                </div>
+                <div class="sidebar-item">
+                    <span class="sidebar-label">Frequency</span>
+                    <div class="sidebar-value">{{ investor.frequency }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

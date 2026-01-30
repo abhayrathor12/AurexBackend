@@ -1,0 +1,563 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    :root {
+        --primary-dark: #203248;
+        --accent-red: #a8042b;
+        --white: #ffffff;
+        --light-gray: #f8f9fa;
+        --border-color: #e5e7eb;
+        --text-primary: #1f2937;
+        --text-secondary: #6b7280;
+        --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .startup-detail-container {
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    /* BACK BUTTON */
+    .back-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+        text-decoration: none;
+        font-weight: 600;
+        color: var(--accent-red);
+        font-size: 0.9rem;
+        transition: var(--transition);
+        padding: 0.5rem 0;
+    }
+
+    .back-btn:hover {
+        gap: 0.75rem;
+        color: #8a0623;
+    }
+
+    /* HEADER */
+    .startup-header {
+        background: linear-gradient(135deg, var(--primary-dark) 0%, #2a4a66 100%);
+        color: white;
+        padding: 1.5rem;
+        border-radius: 12px;
+        margin-bottom: 1rem;
+        box-shadow: var(--shadow-md);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .startup-header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -20%;
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(circle, rgba(168, 4, 43, 0.2) 0%, transparent 70%);
+        border-radius: 50%;
+    }
+
+    .startup-header::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, var(--accent-red) 0%, transparent 100%);
+    }
+
+    .header-content {
+        position: relative;
+        z-index: 1;
+    }
+
+    .startup-header h1 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        letter-spacing: -0.3px;
+    }
+
+    .header-meta {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+        opacity: 0.95;
+    }
+
+    .meta-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        padding: 0.375rem 0.75rem;
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    /* CONTENT GRID */
+    .content-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    /* SECTION */
+    .section {
+        background: var(--white);
+        padding: 1.25rem;
+        border-radius: 12px;
+        box-shadow: var(--shadow-sm);
+        border: 1px solid var(--border-color);
+        transition: var(--transition);
+        margin-bottom: 1rem;
+    }
+
+    .section:hover {
+        box-shadow: var(--shadow-md);
+        border-color: var(--accent-red);
+    }
+
+    .section-header {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.875rem;
+        padding-bottom: 0.625rem;
+        border-bottom: 2px solid var(--light-gray);
+    }
+
+    .section-icon {
+        font-size: 1.25rem;
+    }
+
+    .section h3 {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--primary-dark);
+        margin: 0;
+        letter-spacing: -0.2px;
+    }
+
+    /* INFO ROWS */
+    .info-item {
+        display: grid;
+        grid-template-columns: 140px 1fr;
+        gap: 0.75rem;
+        padding: 0.625rem 0;
+        border-bottom: 1px solid var(--light-gray);
+        align-items: start;
+    }
+
+    .info-item:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    .info-item:first-child {
+        padding-top: 0;
+    }
+
+    .info-label {
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .info-value {
+        font-size: 0.9rem;
+        color: var(--text-primary);
+        font-weight: 500;
+        word-break: break-word;
+    }
+
+    .info-value strong {
+        color: var(--primary-dark);
+        font-weight: 600;
+    }
+
+    .info-value a {
+        color: var(--accent-red);
+        text-decoration: none;
+        font-weight: 600;
+        transition: var(--transition);
+    }
+
+    .info-value a:hover {
+        text-decoration: underline;
+    }
+
+    /* DESCRIPTION */
+    .description-text {
+        font-size: 0.9rem;
+        line-height: 1.6;
+        color: var(--text-primary);
+        margin: 0;
+    }
+
+    /* FUNDING HIGHLIGHT */
+    .funding-highlight {
+        background: linear-gradient(135deg, rgba(168, 4, 43, 0.1) 0%, rgba(168, 4, 43, 0.05) 100%);
+        padding: 1rem;
+        border-radius: 10px;
+        text-align: center;
+        border: 2px solid rgba(168, 4, 43, 0.2);
+        margin-top: 0.75rem;
+    }
+
+    .funding-label {
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        margin-bottom: 0.375rem;
+    }
+
+    .funding-amount {
+        font-size: 1.75rem;
+        font-weight: 800;
+        color: var(--accent-red);
+        letter-spacing: -0.5px;
+    }
+
+    /* PITCH DECK SECTION */
+    .pitch-deck-section {
+        background: linear-gradient(135deg, var(--primary-dark) 0%, #2a4a66 100%);
+        padding: 1.25rem;
+        border-radius: 12px;
+        text-align: center;
+        box-shadow: var(--shadow-md);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        margin-bottom: 1rem;
+    }
+
+    .pitch-deck-section h3 {
+        color: white;
+        margin-bottom: 0.875rem;
+        font-size: 1rem;
+    }
+
+    .download-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        background: var(--accent-red);
+        color: white;
+        text-decoration: none;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: var(--transition);
+        box-shadow: var(--shadow-sm);
+    }
+
+    .download-btn:hover {
+        background: #8a0623;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(168, 4, 43, 0.3);
+    }
+
+    /* SIDEBAR SECTIONS */
+    .sidebar-section {
+        background: var(--white);
+        padding: 1rem;
+        border-radius: 12px;
+        box-shadow: var(--shadow-sm);
+        border: 1px solid var(--border-color);
+        margin-bottom: 1rem;
+    }
+
+    .sidebar-section h4 {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: var(--primary-dark);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 0.625rem;
+        display: flex;
+        align-items: center;
+        gap: 0.375rem;
+    }
+
+    .sidebar-item {
+        padding: 0.5rem 0;
+        border-bottom: 1px solid var(--light-gray);
+        font-size: 0.85rem;
+    }
+
+    .sidebar-item:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    .sidebar-item:first-child {
+        padding-top: 0;
+    }
+
+    .sidebar-label {
+        font-weight: 600;
+        color: var(--text-secondary);
+        font-size: 0.75rem;
+        display: block;
+        margin-bottom: 0.25rem;
+    }
+
+    .sidebar-value {
+        color: var(--text-primary);
+        font-weight: 500;
+    }
+
+    /* STATUS BADGE */
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.375rem 0.75rem;
+        background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+        color: #065f46;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+    }
+
+    /* ANIMATION */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .section, .sidebar-section {
+        animation: fadeIn 0.4s ease-out;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 968px) {
+        .content-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .info-item {
+            grid-template-columns: 120px 1fr;
+            gap: 0.5rem;
+        }
+    }
+
+    @media (max-width: 640px) {
+        .startup-header {
+            padding: 1.25rem;
+        }
+
+        .startup-header h1 {
+            font-size: 1.5rem;
+        }
+
+        .header-meta {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .info-item {
+            grid-template-columns: 1fr;
+            gap: 0.25rem;
+        }
+
+        .info-label {
+            font-size: 0.75rem;
+        }
+
+        .section {
+            padding: 1rem;
+        }
+
+        .funding-amount {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+
+<div class="startup-detail-container">
+    <!-- BACK BUTTON -->
+    <a href="{% url 'startup_list' %}" class="back-btn">
+        <span>←</span> Back to Startups
+    </a>
+
+    <!-- HEADER -->
+    <div class="startup-header">
+        <div class="header-content">
+            <h1>{{ startup.startup_name }}</h1>
+            <div class="header-meta">
+                <span class="meta-badge">
+                    <span>🏢</span> {{ startup.sector }}
+                </span>
+                <span class="meta-badge">
+                    <span>📊</span> {{ startup.stage }}
+                </span>
+                <span class="meta-badge">
+                    <span>💼</span> {{ startup.funding_stage }}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTENT GRID -->
+    <div class="content-grid">
+        <!-- MAIN CONTENT -->
+        <div>
+            <!-- BASIC INFORMATION -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-icon">📌</span>
+                    <h3>Basic Information</h3>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Description</span>
+                    <p class="description-text">{{ startup.description }}</p>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Website</span>
+                    <span class="info-value">
+                        {% if startup.website %}
+                            <a href="{{ startup.website }}" target="_blank">{{ startup.website }}</a>
+                        {% else %}
+                            —
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Address</span>
+                    <span class="info-value">{{ startup.address }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Entity Type</span>
+                    <span class="info-value">{{ startup.entity_type }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Status</span>
+                    <span class="info-value">
+                        <span class="status-badge">{{ startup.incorporation_status }}</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- FOUNDERS -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-icon">👥</span>
+                    <h3>Founders & Team</h3>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Names</span>
+                    <span class="info-value"><strong>{{ startup.founders }}</strong></span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Designations</span>
+                    <span class="info-value">{{ startup.designations }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Experience</span>
+                    <span class="info-value">{{ startup.experience }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">LinkedIn</span>
+                    <span class="info-value">
+                        {% if startup.linkedin %}
+                            <a href="{{ startup.linkedin }}" target="_blank">View Profile</a>
+                        {% else %}
+                            —
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+
+            <!-- FUNDING DETAILS -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-icon">💰</span>
+                    <h3>Funding Details</h3>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Stage</span>
+                    <span class="info-value"><strong>{{ startup.funding_stage }}</strong></span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Purpose</span>
+                    <span class="info-value">{{ startup.purpose }}</span>
+                </div>
+                <div class="funding-highlight">
+                    <div class="funding-label">Raise Amount</div>
+                    <div class="funding-amount">₹{{ startup.raise_amount }}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SIDEBAR -->
+        <div>
+            <!-- CONTACT -->
+            <div class="sidebar-section">
+                <h4><span>📞</span> Contact Details</h4>
+                <div class="sidebar-item">
+                    <span class="sidebar-label">Email</span>
+                    <div class="sidebar-value">
+                        <a href="mailto:{{ startup.email }}" style="color: var(--accent-red); text-decoration: none; font-weight: 600;">{{ startup.email }}</a>
+                    </div>
+                </div>
+                <div class="sidebar-item">
+                    <span class="sidebar-label">Phone</span>
+                    <div class="sidebar-value">
+                        <a href="tel:{{ startup.phone }}" style="color: var(--primary-dark); text-decoration: none; font-weight: 600;">{{ startup.phone }}</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PITCH DECK -->
+            {% if startup.pitch_deck %}
+            <div class="pitch-deck-section">
+                <h3><span>📄</span> Pitch Deck</h3>
+                <a href="{{ startup.pitch_deck.url }}" target="_blank" class="download-btn">
+                    <span>⬇</span> Download PDF
+                </a>
+            </div>
+            {% endif %}
+
+            <!-- QUICK INFO -->
+            <div class="sidebar-section">
+                <h4><span>ℹ️</span> Quick Info</h4>
+                <div class="sidebar-item">
+                    <span class="sidebar-label">Sector</span>
+                    <div class="sidebar-value">{{ startup.sector }}</div>
+                </div>
+                <div class="sidebar-item">
+                    <span class="sidebar-label">Stage</span>
+                    <div class="sidebar-value">{{ startup.stage }}</div>
+                </div>
+                <div class="sidebar-item">
+                    <span class="sidebar-label">Incorporation</span>
+                    <div class="sidebar-value">{{ startup.incorporation_status }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
