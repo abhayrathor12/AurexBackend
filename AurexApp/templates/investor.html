@@ -7,228 +7,251 @@
         padding: 0;
         box-sizing: border-box;
     }
+
     .container {
         max-width: 1400px;
         margin: 0 auto;
+        padding: 0 14px;
     }
 
-    /* HEADER - matched with startup.html */
+    /* HEADER */
     .header {
         background: linear-gradient(135deg, #203248 0%, #2a4060 100%);
-        padding: 24px 32px;
+        padding: clamp(16px, 5vw, 24px) clamp(20px, 6vw, 32px);
         border-radius: 12px;
-        margin-bottom: 24px;
+        margin: 20px 0 24px;
         color: white;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        gap: 16px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+        flex-wrap: wrap;
     }
+
     .header-left h1 {
-        font-size: 1.75rem;
+        font-size: clamp(1.45rem, 5.5vw, 1.75rem);
         font-weight: 700;
         margin-bottom: 6px;
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: 10px;
     }
+
     .header-left p {
-        font-size: 0.95rem;
+        font-size: clamp(0.9rem, 3.8vw, 0.95rem);
         opacity: 0.9;
     }
 
-    /* CONTROLS - almost identical */
+    /* CONTROLS */
     .controls {
         background: white;
-        padding: 16px 24px;
+        padding: 16px;
         border-radius: 12px;
         margin-bottom: 24px;
         display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
+        flex-direction: column;
         gap: 16px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        box-shadow: 0 1px 4px rgba(0,0,0,0.06);
         border: 1px solid #e5e7eb;
     }
+
+    @media (min-width: 640px) {
+        .controls {
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+        }
+    }
+
     .search-box {
-        flex: 1;
-        min-width: 280px;
         position: relative;
     }
+
     .search-box input {
         width: 100%;
-        padding: 10px 40px 10px 16px;
+        padding: 12px 44px 12px 16px;
         border: 2px solid #e5e7eb;
-        border-radius: 8px;
-        font-size: 0.95rem;
-        transition: all 0.3s;
-        font-family: 'Inter', sans-serif;
+        border-radius: 10px;
+        font-size: clamp(0.95rem, 3.5vw, 1rem);
+        transition: all 0.2s;
     }
+
     .search-box input:focus {
         outline: none;
         border-color: #a8042b;
-        box-shadow: 0 0 0 3px rgba(168, 4, 43, 0.1);
+        box-shadow: 0 0 0 3px rgba(168,4,43,0.12);
     }
+
     .search-icon {
         position: absolute;
         right: 14px;
         top: 50%;
         transform: translateY(-50%);
         color: #6b7280;
-        font-size: 1.1rem;
+        font-size: 1.2rem;
     }
+
     .view-toggle {
         display: flex;
-        gap: 8px;
         background: #f8f9fa;
         padding: 4px;
-        border-radius: 8px;
+        border-radius: 10px;
+        align-self: center;
     }
+
     .view-btn {
-        padding: 8px 18px;
+        padding: 10px 18px;
         border: none;
         background: transparent;
-        border-radius: 6px;
+        border-radius: 8px;
         cursor: pointer;
         font-weight: 600;
-        font-size: 0.9rem;
+        font-size: clamp(0.9rem, 3.4vw, 0.95rem);
+        color: #4b5563;
+        min-width: 90px;
         transition: all 0.2s;
-        color: #6b7280;
-        display: flex;
-        align-items: center;
-        gap: 6px;
+        touch-action: manipulation;
     }
+
     .view-btn:hover {
         color: #203248;
+        background: rgba(32,50,72,0.07);
     }
+
     .view-btn.active {
         background: white;
         color: #a8042b;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
 
-    /* TABLE - aligned styling with startup */
-    .table-container {
+    /* TABLE */
+    .table-wrapper {
+        overflow-x: auto;
         background: white;
         border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        box-shadow: 0 1px 4px rgba(0,0,0,0.06);
         border: 1px solid #e5e7eb;
     }
+
     table {
         width: 100%;
         border-collapse: collapse;
+        min-width: 780px;          /* triggers horizontal scroll on mobile */
+        font-size: 0.92rem;
     }
+
+    th, td {
+        padding: 12px 14px;
+        text-align: left;
+    }
+
     thead {
         background: linear-gradient(135deg, #203248 0%, #2a4060 100%);
     }
+
     th {
-        padding: 14px 16px;
-        text-align: left;
         color: white;
         font-weight: 600;
-        font-size: 0.85rem;
+        font-size: 0.82rem;
         text-transform: uppercase;
-        letter-spacing: 0.5px;
+        letter-spacing: 0.4px;
+        white-space: nowrap;
     }
+
     td {
-        padding: 14px 16px;
         border-bottom: 1px solid #f1f5f9;
         color: #1f2937;
-        font-size: 0.9rem;
     }
+
     tbody tr {
-        transition: all 0.2s;
         cursor: pointer;
+        transition: background 0.15s;
     }
+
     tbody tr:hover {
-        background-color: #fef5f7;
-        transform: scale(1.001);
+        background: #fef5f7;
     }
+
     .badge {
         display: inline-block;
-        padding: 4px 12px;
+        padding: 5px 10px;
         border-radius: 6px;
-        font-size: 0.75rem;
+        font-size: 0.78rem;
         font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 0.3px;
+        white-space: nowrap;
     }
-    .badge-angel {        background: #dbeafe; color: #1e40af; }
-    .badge-vc,
-    .badge-venture {      background: #ffe8ed; color: #a8042b; }
-    .badge-family {       background: #fff3e0; color: #e65100; }
-    .badge-institutional {background: #f3e5f5; color: #6a1b9a; }
 
-    /* MINIMAL & COMPACT GRID CARDS — same style family as startup */
+    .badge-angel       { background: #dbeafe; color: #1e40af; }
+    .badge-vc,
+    .badge-venture     { background: #ffe8ed; color: #a8042b; }
+    .badge-family      { background: #fff3e0; color: #e65100; }
+    .badge-institutional { background: #f3e5f5; color: #6a1b9a; }
+
+    /* GRID / CARDS */
     .grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-        gap: 20px;
+        display: none;
+        grid-template-columns: 1fr;
+        gap: 18px;
     }
+
+    @media (min-width: 640px) {
+        .grid {
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+        }
+    }
+
     .card {
         background: white;
         border-radius: 12px;
-        box-shadow: 0 2px 8px rgba(32, 50, 72, 0.08);
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         border: 1px solid #e5e7eb;
+        box-shadow: 0 2px 8px rgba(32,50,72,0.07);
         overflow: hidden;
+        transition: all 0.25s ease;
         cursor: pointer;
-        position: relative;
     }
-    .card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 3px;
-        background: linear-gradient(90deg, #a8042b 0%, #203248 100%);
-        transform: scaleX(0);
-        transform-origin: left;
-        transition: transform 0.3s ease;
-    }
+
     .card:hover {
         transform: translateY(-4px);
-        box-shadow: 0 12px 24px rgba(32, 50, 72, 0.15);
+        box-shadow: 0 10px 20px rgba(32,50,72,0.14);
         border-color: #a8042b;
     }
-    .card:hover::before {
-        transform: scaleX(1);
-    }
+
     .card-header {
-        padding: 20px;
+        padding: 18px;
         background: linear-gradient(135deg, #203248 0%, #2a4060 100%);
         color: white;
     }
+
     .card-title {
-        font-size: 1.15rem;
+        font-size: clamp(1.05rem, 4.2vw, 1.15rem);
         font-weight: 700;
         margin-bottom: 8px;
-        line-height: 1.3;
     }
+
     .card-meta {
         display: flex;
         justify-content: space-between;
         align-items: center;
         gap: 10px;
+        flex-wrap: wrap;
     }
+
     .category-badge {
-        display: inline-block;
         padding: 4px 10px;
         border-radius: 6px;
-        font-size: 0.7rem;
+        font-size: 0.72rem;
         font-weight: 700;
-        background: rgba(255, 255, 255, 0.2);
-        color: white;
+        background: rgba(255,255,255,0.22);
+        backdrop-filter: blur(6px);
         text-transform: uppercase;
-        letter-spacing: 0.5px;
-        backdrop-filter: blur(10px);
+        letter-spacing: 0.4px;
     }
 
     .card-body {
-        padding: 20px;
+        padding: 18px;
     }
 
     .info-compact {
@@ -236,39 +259,39 @@
         gap: 12px;
         margin-bottom: 16px;
     }
+
     .info-item {
         display: flex;
-        align-items: center;
         gap: 10px;
+        align-items: center;
     }
+
     .info-icon {
         width: 36px;
         height: 36px;
+        background: linear-gradient(135deg, #203248 0%, #2a4060 100%);
+        border-radius: 8px;
+        color: white;
         display: flex;
         align-items: center;
         justify-content: center;
-        background: linear-gradient(135deg, #203248 0%, #2a4060 100%);
-        border-radius: 8px;
-        font-size: 1rem;
+        font-size: 1.05rem;
         flex-shrink: 0;
-        box-shadow: 0 2px 4px rgba(32, 50, 72, 0.15);
     }
-    .info-details {
-        flex: 1;
-        min-width: 0;
-    }
+
     .info-label {
         color: #6b7280;
-        font-size: 0.7rem;
+        font-size: 0.72rem;
         font-weight: 600;
         text-transform: uppercase;
-        letter-spacing: 0.5px;
+        letter-spacing: 0.4px;
         margin-bottom: 2px;
     }
+
     .info-value {
+        font-size: 0.92rem;
+        font-weight: 500;
         color: #1f2937;
-        font-weight: 600;
-        font-size: 0.9rem;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -276,90 +299,131 @@
 
     .ticket-box {
         background: linear-gradient(135deg, #fef5f7 0%, #ffe8ed 100%);
-        padding: 14px;
+        padding: 12px;
         border-radius: 10px;
         text-align: center;
         border: 2px solid #ffd6dd;
+        margin-top: 8px;
     }
+
     .ticket-label {
-        font-size: 0.7rem;
+        font-size: 0.72rem;
         color: #6b7280;
         font-weight: 600;
         text-transform: uppercase;
-        letter-spacing: 0.5px;
+        letter-spacing: 0.4px;
         margin-bottom: 4px;
     }
+
     .ticket-amount {
-        font-size: 1.5rem;
+        font-size: clamp(1.25rem, 5vw, 1.45rem);
         font-weight: 800;
         color: #a8042b;
-        letter-spacing: -0.5px;
-    }
-
-    #gridView {
-        display: none;
     }
 
     /* EMPTY STATE */
     .empty-state {
         text-align: center;
-        padding: 60px 20px;
+        padding: 70px 20px;
         color: #6b7280;
     }
+
     .empty-state-icon {
-        font-size: 4rem;
+        font-size: clamp(3.5rem, 12vw, 4.5rem);
         margin-bottom: 16px;
-        opacity: 0.5;
+        opacity: 0.45;
     }
+
     .empty-state h3 {
-        font-size: 1.25rem;
+        font-size: clamp(1.15rem, 4.5vw, 1.25rem);
         color: #1f2937;
         margin-bottom: 8px;
     }
 
-    /* RESPONSIVE */
-    @media (max-width: 768px) {
+    /* ──────────────────────────────────────────────
+       RESPONSIVE ADJUSTMENTS
+    ────────────────────────────────────────────── */
+
+    @media (max-width: 640px) {
         .header {
             flex-direction: column;
-            align-items: flex-start;
-            gap: 12px;
-            padding: 20px 24px;
+            text-align: center;
+            align-items: center;
         }
-        .header-left h1 {
-            font-size: 1.4rem;
+
+        .header-left {
+            text-align: center;
         }
-        .controls {
-            flex-direction: column;
-            padding: 16px;
+
+        th, td {
+            padding: 10px 12px;
+            font-size: 0.86rem;
         }
-        .search-box {
-            width: 100%;
+
+        .badge {
+            font-size: 0.74rem;
+            padding: 4px 8px;
         }
-        .grid {
-            grid-template-columns: 1fr;
-        }
-    }
-    @media (max-width: 480px) {
-        .header-left h1 {
-            font-size: 1.25rem;
-        }
+
         .card-header, .card-body {
             padding: 16px;
         }
+
+        .info-icon {
+            width: 34px;
+            height: 34px;
+            font-size: 1rem;
+        }
+
+        .info-value {
+            font-size: 0.88rem;
+        }
+
+        .ticket-box {
+            padding: 10px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .container {
+            padding: 0 10px;
+        }
+
+        .search-box input {
+            padding: 11px 40px 11px 14px;
+            font-size: 0.96rem;
+        }
+
+        .view-btn {
+            padding: 9px 14px;
+            font-size: 0.88rem;
+            min-width: 80px;
+        }
+
+        table {
+            font-size: 0.84rem;
+        }
+
+        th {
+            font-size: 0.78rem;
+        }
+
         .ticket-amount {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
+        }
+
+        .empty-state {
+            padding: 50px 16px;
         }
     }
 </style>
 
 <div class="container">
+
     <!-- HEADER -->
     <div class="header">
         <div class="header-left">
-            <h1>
-                <span>💼</span>
-                Investor Applications
-            </h1>
+            <h1><span>💼</span> Investor Applications</h1>
             <p>Manage and connect with potential investors</p>
         </div>
     </div>
@@ -370,81 +434,78 @@
             <input type="text" id="searchInput" placeholder="Search name, entity, sectors, stages..." onkeyup="filterInvestors()">
             <span class="search-icon">🔍</span>
         </div>
-       
+
         <div class="view-toggle">
-            <button id="tableBtn" class="view-btn active" onclick="showTable()">
-                📋 Table
-            </button>
-            <button id="gridBtn" class="view-btn" onclick="showGrid()">
-                🎴 Cards
-            </button>
+            <button id="tableBtn" class="view-btn active" onclick="showTable()">📋 Table</button>
+            <button id="gridBtn" class="view-btn" onclick="showGrid()">🎴 Cards</button>
         </div>
     </div>
 
     <!-- TABLE VIEW -->
-    <div id="tableView" class="table-container">
-        <table id="investorTable">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Category</th>
-                    <th>Experience</th>
-                    <th>Stages</th>
-                    <th>Sectors</th>
-                    <th>Ticket Size</th>
-                    <th>Location</th>
-                    <th>Date</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for i in investors %}
-                <tr onclick="window.location='{% url 'investor_detail' i.id %}'" style="cursor: pointer;">
-                    <td>
-                        <strong>{{ i.full_name }}</strong>
-                        {% if i.entity %}<br><small style="color:#64748b;">{{ i.entity }}</small>{% endif %}
-                    </td>
-                    <td>
-                        <span class="badge badge-{{ i.category|lower|cut:' '|cut:'-' }}">
-                            {{ i.category }}
-                        </span>
-                    </td>
-                    <td>{{ i.experience }}</td>
-                    <td>{{ i.stages|join:", " }}</td>
-                    <td>{{ i.sectors|join:", " }}</td>
-                    <td><strong>{{ i.ticket }}</strong></td>
-                    <td>{{ i.city|default:"—" }}</td>
-                    <td>{{ i.created_at|date:"d M Y" }}</td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="8">
-                        <div class="empty-state">
-                            <div class="empty-state-icon">📭</div>
-                            <h3>No investor applications found</h3>
-                            <p>New applications will appear here</p>
-                        </div>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <div id="tableView">
+        <div class="table-wrapper">
+            <table id="investorTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Experience</th>
+                        <th>Stages</th>
+                        <th>Sectors</th>
+                        <th>Ticket Size</th>
+                        <th>Location</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in investors %}
+                    <tr onclick="window.location='{% url 'investor_detail' i.id %}'">
+                        <td>
+                            <strong>{{ i.full_name }}</strong>
+                            {% if i.entity %}<br><small style="color:#64748b;">{{ i.entity }}</small>{% endif %}
+                        </td>
+                        <td>
+                            <span class="badge badge-{{ i.category|lower|cut:' '|cut:'-' }}">
+                                {{ i.category }}
+                            </span>
+                        </td>
+                        <td>{{ i.experience|default:"—" }}</td>
+                        <td>{{ i.stages|join:", " }}</td>
+                        <td>{{ i.sectors|join:", " }}</td>
+                        <td><strong>{{ i.ticket }}</strong></td>
+                        <td>{{ i.city|default:"—" }}</td>
+                        <td>{{ i.created_at|date:"d M Y" }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="8">
+                            <div class="empty-state">
+                                <div class="empty-state-icon">📭</div>
+                                <h3>No investor applications found</h3>
+                                <p>New applications will appear here</p>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 
-    <!-- GRID VIEW – very compact & minimal -->
+    <!-- GRID VIEW -->
     <div id="gridView" class="grid">
         {% for i in investors %}
         <div class="card" onclick="window.location='{% url 'investor_detail' i.id %}'">
-            
             <div class="card-header">
                 <h3 class="card-title">{{ i.full_name }}</h3>
                 <div class="card-meta">
                     <span class="category-badge">{{ i.category }}</span>
                     {% if i.entity %}
-                    <span style="font-size:0.8rem; opacity:0.9;">{{ i.entity }}</span>
+                    <span style="font-size:0.78rem; opacity:0.9;">{{ i.entity }}</span>
                     {% endif %}
                 </div>
             </div>
-           
+
             <div class="card-body">
                 <div class="info-compact">
                     <div class="info-item">
@@ -484,49 +545,46 @@
         </div>
         {% endfor %}
     </div>
+
 </div>
 
-<!-- JAVASCRIPT – almost same as startup -->
 <script>
-    function showTable() {
-        document.getElementById("tableView").style.display = "block";
-        document.getElementById("gridView").style.display = "none";
-        document.getElementById("tableBtn").classList.add("active");
-        document.getElementById("gridBtn").classList.remove("active");
+// ──────────────────────────────────────────────
+// JavaScript (unchanged — already works well)
+// ──────────────────────────────────────────────
+function showTable() {
+    document.getElementById("tableView").style.display = "block";
+    document.getElementById("gridView").style.display = "none";
+    document.getElementById("tableBtn").classList.add("active");
+    document.getElementById("gridBtn").classList.remove("active");
+}
+
+function showGrid() {
+    document.getElementById("tableView").style.display = "none";
+    document.getElementById("gridView").style.display = "grid";
+    document.getElementById("gridBtn").classList.add("active");
+    document.getElementById("tableBtn").classList.remove("active");
+}
+
+function filterInvestors() {
+    const filter = document.getElementById("searchInput").value.toLowerCase();
+
+    // Table
+    const tr = document.querySelectorAll("#investorTable tr");
+    for (let i = 1; i < tr.length; i++) {
+        const row = tr[i];
+        row.style.display = row.textContent.toLowerCase().includes(filter) ? "" : "none";
     }
 
-    function showGrid() {
-        document.getElementById("tableView").style.display = "none";
-        document.getElementById("gridView").style.display = "grid";
-        document.getElementById("gridBtn").classList.add("active");
-        document.getElementById("tableBtn").classList.remove("active");
-    }
-
-    function filterInvestors() {
-        const input = document.getElementById("searchInput");
-        const filter = input.value.toLowerCase();
-
-        // Table filter
-        const table = document.getElementById("investorTable");
-        const tr = table.getElementsByTagName("tr");
-        for (let i = 1; i < tr.length; i++) {
-            const row = tr[i];
-            const text = row.textContent || row.innerText;
-            row.style.display = text.toLowerCase().indexOf(filter) > -1 ? "" : "none";
-        }
-
-        // Grid filter
-        const cards = document.querySelectorAll(".card");
-        cards.forEach(card => {
-            const text = card.textContent || card.innerText;
-            card.style.display = text.toLowerCase().indexOf(filter) > -1 ? "" : "none";
-        });
-    }
-
-    // Default view = table
-    document.addEventListener('DOMContentLoaded', function() {
-        showTable();
+    // Cards
+    document.querySelectorAll(".card").forEach(card => {
+        card.style.display = card.textContent.toLowerCase().includes(filter) ? "" : "none";
     });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    showTable();
+});
 </script>
 
 {% endblock %}

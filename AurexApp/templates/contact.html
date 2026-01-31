@@ -8,26 +8,35 @@
         box-sizing: border-box;
     }
 
+    body {
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        background: #f8fafc;
+        color: #1f2937;
+    }
+
     .container {
-        max-width: 1400px;
+        max-width: 1440px;
         margin: 0 auto;
+        padding: 0 16px;
     }
 
     /* HEADER */
     .header {
         background: linear-gradient(135deg, #203248 0%, #2a4060 100%);
-        padding: 24px 32px;
+        padding: 20px 24px;
         border-radius: 12px;
-        margin-bottom: 24px;
+        margin: 24px 0 20px;
         color: white;
         display: flex;
+        flex-wrap: wrap;
         justify-content: space-between;
         align-items: center;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        gap: 20px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
 
     .header-left h1 {
-        font-size: 1.75rem;
+        font-size: clamp(1.5rem, 5.5vw, 1.9rem);
         font-weight: 700;
         margin-bottom: 6px;
         display: flex;
@@ -36,122 +45,134 @@
     }
 
     .header-left p {
-        font-size: 0.95rem;
+        font-size: clamp(0.9rem, 3.5vw, 1rem);
         opacity: 0.9;
     }
 
     .stats-badge {
-        background: rgba(255, 255, 255, 0.2);
+        background: rgba(255,255,255,0.18);
         padding: 12px 20px;
         border-radius: 10px;
         backdrop-filter: blur(10px);
         text-align: center;
+        min-width: 120px;
     }
 
     .stats-badge .number {
-        font-size: 1.5rem;
+        font-size: clamp(1.4rem, 6vw, 1.7rem);
         font-weight: 700;
         display: block;
     }
 
     .stats-badge .label {
-        font-size: 0.75rem;
+        font-size: 0.78rem;
         opacity: 0.9;
         text-transform: uppercase;
-        letter-spacing: 0.5px;
+        letter-spacing: 0.6px;
     }
 
     /* CONTROLS */
     .controls {
         background: white;
-        padding: 16px 24px;
+        padding: 16px;
         border-radius: 12px;
         margin-bottom: 24px;
         display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
+        flex-direction: column;
         gap: 16px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.07);
         border: 1px solid #e5e7eb;
     }
 
+    @media (min-width: 640px) {
+        .controls {
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+        }
+    }
+
     .search-box {
-        flex: 1;
-        min-width: 280px;
         position: relative;
+        flex: 1;
     }
 
     .search-box input {
         width: 100%;
-        padding: 10px 40px 10px 16px;
+        padding: 12px 48px 12px 16px;
         border: 2px solid #e5e7eb;
-        border-radius: 8px;
-        font-size: 0.95rem;
-        transition: all 0.3s;
-        font-family: 'Inter', sans-serif;
+        border-radius: 10px;
+        font-size: 1rem;
+        transition: all 0.2s ease;
     }
 
     .search-box input:focus {
         outline: none;
         border-color: #a8042b;
-        box-shadow: 0 0 0 3px rgba(168, 4, 43, 0.1);
+        box-shadow: 0 0 0 4px rgba(168,4,43,0.12);
     }
 
     .search-icon {
         position: absolute;
-        right: 14px;
+        right: 16px;
         top: 50%;
         transform: translateY(-50%);
         color: #6b7280;
-        font-size: 1.1rem;
+        font-size: 1.25rem;
     }
 
     .view-toggle {
         display: flex;
-        gap: 8px;
-        background: #f8f9fa;
+        background: #f1f5f9;
         padding: 4px;
-        border-radius: 8px;
+        border-radius: 10px;
+        align-self: center;
     }
 
     .view-btn {
-        padding: 8px 18px;
+        padding: 10px 20px;
         border: none;
         background: transparent;
-        border-radius: 6px;
+        border-radius: 8px;
         cursor: pointer;
         font-weight: 600;
-        font-size: 0.9rem;
+        font-size: 0.95rem;
+        color: #4b5563;
         transition: all 0.2s;
-        color: #6b7280;
-        display: flex;
-        align-items: center;
-        gap: 6px;
+        min-width: 100px;
+        touch-action: manipulation;
     }
 
     .view-btn:hover {
+        background: rgba(32,50,72,0.08);
         color: #203248;
     }
 
     .view-btn.active {
         background: white;
         color: #a8042b;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
 
-    /* TABLE VIEW */
-    .table-container {
-        background: white;
+    /* TABLE */
+    .table-wrapper {
+        overflow-x: auto;
         border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        background: white;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.07);
         border: 1px solid #e5e7eb;
     }
 
     table {
         width: 100%;
         border-collapse: collapse;
+        min-width: 720px;          /* forces horizontal scroll on small screens */
+        font-size: 0.94rem;
+    }
+
+    th, td {
+        padding: 14px 16px;
+        text-align: left;
     }
 
     thead {
@@ -159,116 +180,90 @@
     }
 
     th {
-        padding: 14px 16px;
-        text-align: left;
         color: white;
         font-weight: 600;
-        font-size: 0.85rem;
+        font-size: 0.84rem;
         text-transform: uppercase;
         letter-spacing: 0.5px;
+        white-space: nowrap;
     }
 
     td {
-        padding: 14px 16px;
         border-bottom: 1px solid #f1f5f9;
         color: #1f2937;
-        font-size: 0.9rem;
-    }
-
-    tbody tr {
-        transition: all 0.2s;
-        cursor: pointer;
     }
 
     tbody tr:hover {
-        background-color: #fef5f7;
-        transform: scale(1.001);
+        background: #fef5f7;
     }
 
     .message-cell {
-        max-width: 300px;
+        max-width: 280px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
     }
 
     .type-badge {
-        display: inline-block;
-        padding: 4px 12px;
+        padding: 5px 12px;
         border-radius: 6px;
-        font-size: 0.75rem;
+        font-size: 0.8rem;
         font-weight: 600;
-        text-transform: capitalize;
         background: #dbeafe;
         color: #1e40af;
+        white-space: nowrap;
     }
 
-    /* GRID VIEW */
+    /* GRID */
     .grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-        gap: 20px;
+        grid-template-columns: 1fr;
+        gap: 18px;
+        display: none;
+    }
+
+    @media (min-width: 640px) {
+        .grid {
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+        }
     }
 
     .card {
         background: white;
         border-radius: 12px;
-        box-shadow: 0 2px 8px rgba(32, 50, 72, 0.08);
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         border: 1px solid #e5e7eb;
+        box-shadow: 0 2px 10px rgba(32,50,72,0.08);
         overflow: hidden;
-        cursor: pointer;
-        position: relative;
-    }
-
-    .card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 3px;
-        background: linear-gradient(90deg, #a8042b 0%, #203248 100%);
-        transform: scaleX(0);
-        transform-origin: left;
-        transition: transform 0.3s ease;
+        transition: all 0.25s ease;
     }
 
     .card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 12px 24px rgba(32, 50, 72, 0.15);
+        transform: translateY(-5px);
+        box-shadow: 0 12px 24px rgba(32,50,72,0.15);
         border-color: #a8042b;
-    }
-
-    .card:hover::before {
-        transform: scaleX(1);
     }
 
     .card-header {
         padding: 20px;
         background: linear-gradient(135deg, #203248 0%, #2a4060 100%);
         color: white;
-        position: relative;
     }
 
     .card-name {
-        font-size: 1.15rem;
+        font-size: clamp(1.1rem, 4vw, 1.25rem);
         font-weight: 700;
         margin-bottom: 8px;
-        line-height: 1.3;
     }
 
     .card-type {
-        display: inline-block;
-        padding: 4px 10px;
+        padding: 5px 12px;
         border-radius: 6px;
-        font-size: 0.7rem;
+        font-size: 0.78rem;
         font-weight: 700;
-        background: rgba(255, 255, 255, 0.2);
-        color: white;
+        background: rgba(255,255,255,0.2);
+        backdrop-filter: blur(8px);
         text-transform: uppercase;
-        letter-spacing: 0.5px;
-        backdrop-filter: blur(10px);
+        letter-spacing: 0.4px;
     }
 
     .card-body {
@@ -277,10 +272,9 @@
 
     .info-item {
         display: flex;
-        align-items: flex-start;
-        gap: 12px;
-        margin-bottom: 14px;
-        padding-bottom: 14px;
+        gap: 14px;
+        margin-bottom: 16px;
+        padding-bottom: 16px;
         border-bottom: 1px solid #f1f5f9;
     }
 
@@ -291,26 +285,21 @@
     }
 
     .info-icon {
-        width: 36px;
-        height: 36px;
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, #203248 0%, #2a4060 100%);
+        border-radius: 10px;
+        color: white;
         display: flex;
         align-items: center;
         justify-content: center;
-        background: linear-gradient(135deg, #203248 0%, #2a4060 100%);
-        border-radius: 8px;
-        font-size: 1rem;
+        font-size: 1.2rem;
         flex-shrink: 0;
-        box-shadow: 0 2px 4px rgba(32, 50, 72, 0.15);
-    }
-
-    .info-details {
-        flex: 1;
-        min-width: 0;
     }
 
     .info-label {
         color: #6b7280;
-        font-size: 0.7rem;
+        font-size: 0.78rem;
         font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 0.5px;
@@ -318,32 +307,22 @@
     }
 
     .info-value {
-        color: #1f2937;
-        font-weight: 500;
-        font-size: 0.9rem;
-        word-wrap: break-word;
+        font-size: 0.96rem;
+        line-height: 1.4;
+        word-break: break-word;
     }
 
     .message-box {
-        background: #f8f9fa;
-        padding: 12px;
+        background: #f9fafb;
+        padding: 14px;
         border-radius: 8px;
-        border-left: 3px solid #a8042b;
+        border-left: 4px solid #a8042b;
         margin-top: 12px;
     }
 
-    .message-box .info-label {
-        margin-bottom: 6px;
-    }
-
     .message-box .info-value {
-        font-size: 0.85rem;
-        line-height: 1.5;
+        font-size: 0.9rem;
         color: #4b5563;
-    }
-
-    #gridView {
-        display: none;
     }
 
     /* PAGINATION */
@@ -351,197 +330,197 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        gap: 12px;
-        margin-top: 24px;
-        padding: 20px;
+        gap: 16px;
+        margin: 32px 0 40px;
+        padding: 16px;
         background: white;
         border-radius: 12px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         border: 1px solid #e5e7eb;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     }
 
     .pagination-btn {
         padding: 10px 20px;
-        border: 2px solid #e5e7eb;
+        border: 2px solid #d1d5db;
         background: white;
         color: #203248;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.3s;
-        font-size: 0.9rem;
+        border-radius: 10px;
         font-weight: 600;
-        font-family: 'Inter', sans-serif;
+        font-size: 0.95rem;
+        cursor: pointer;
+        min-width: 110px;
+        transition: all 0.2s;
     }
 
     .pagination-btn:hover:not(:disabled) {
         background: #203248;
         color: white;
         border-color: #203248;
-        transform: translateY(-2px);
     }
 
     .pagination-btn:disabled {
         opacity: 0.4;
         cursor: not-allowed;
-        transform: none;
     }
 
     .page-info {
-        color: #6b7280;
-        font-size: 0.9rem;
+        color: #4b5563;
         font-weight: 500;
-        padding: 0 12px;
+        font-size: 0.95rem;
     }
 
     /* EMPTY STATE */
     .empty-state {
         text-align: center;
-        padding: 60px 20px;
+        padding: 80px 24px;
         color: #6b7280;
     }
 
     .empty-state-icon {
-        font-size: 4rem;
-        margin-bottom: 16px;
-        opacity: 0.5;
+        font-size: 5rem;
+        margin-bottom: 20px;
+        opacity: 0.4;
     }
 
     .empty-state h3 {
-        font-size: 1.25rem;
+        font-size: 1.4rem;
         color: #1f2937;
-        margin-bottom: 8px;
+        margin-bottom: 12px;
     }
 
-    /* RESPONSIVE */
-    @media (max-width: 768px) {
+    /* ──────────────────────────────────────────────
+       EXTRA RESPONSIVE TWEAKS
+    ────────────────────────────────────────────── */
+
+    @media (max-width: 480px) {
+        .container {
+            padding: 0 12px;
+        }
+
         .header {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 16px;
-            padding: 20px 24px;
+            padding: 18px 20px;
         }
 
         .header-left h1 {
             font-size: 1.4rem;
         }
 
-        .controls {
-            flex-direction: column;
-            padding: 16px;
+        .stats-badge {
+            padding: 10px 16px;
+            min-width: 100px;
         }
 
-        .search-box {
-            width: 100%;
+        .stats-badge .number {
+            font-size: 1.45rem;
         }
 
-        .grid {
-            grid-template-columns: 1fr;
-        }
-
-        table {
-            font-size: 0.85rem;
+        .view-btn {
+            padding: 9px 16px;
+            font-size: 0.9rem;
+            min-width: 85px;
         }
 
         th, td {
-            padding: 12px 10px;
+            padding: 10px 12px;
+            font-size: 0.88rem;
         }
 
-        .table-container {
-            overflow-x: auto;
+        .message-cell {
+            max-width: 160px;
         }
 
-        table {
-            min-width: 800px;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .header-left h1 {
-            font-size: 1.25rem;
-        }
-
-        .card-header {
+        .card-header, .card-body {
             padding: 16px;
         }
 
-        .card-body {
-            padding: 16px;
+        .info-icon {
+            width: 36px;
+            height: 36px;
+            font-size: 1.05rem;
+        }
+
+        .pagination-btn {
+            padding: 9px 16px;
+            min-width: 95px;
+            font-size: 0.9rem;
+        }
+
+        .empty-state {
+            padding: 60px 16px;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
         }
     }
 </style>
 
 <div class="container">
-    <!-- HEADER -->
+
+    <!-- Header -->
     <div class="header">
         <div class="header-left">
-            <h1>
-                <span>📧</span>
-                Contact Submissions
-            </h1>
-            <p>Manage and review all contact form submissions</p>
+            <h1><span>📧</span> Contact Submissions</h1>
+            <p>Manage and review all incoming contact form messages</p>
         </div>
         <div class="stats-badge">
             <span class="number">{{ contacts|length }}</span>
-            <span class="label">Total Contacts</span>
+            <span class="label">Total Entries</span>
         </div>
     </div>
 
-    <!-- CONTROLS -->
+    <!-- Controls -->
     <div class="controls">
         <div class="search-box">
-            <input type="text" id="searchInput" placeholder="Search by name, email, or phone..." onkeyup="filterContacts()">
+            <input type="text" id="searchInput" placeholder="Search by name, email or phone…" onkeyup="filterContacts()">
             <span class="search-icon">🔍</span>
         </div>
-        
+
         <div class="view-toggle">
-            <button id="tableBtn" class="view-btn active" onclick="showTable()">
-                📋 Table
-            </button>
-            <button id="gridBtn" class="view-btn" onclick="showGrid()">
-                🎴 Cards
-            </button>
+            <button id="tableBtn" class="view-btn active" onclick="showTable()">📋 Table View</button>
+            <button id="gridBtn" class="view-btn" onclick="showGrid()">🃏 Card View</button>
         </div>
     </div>
 
-    <!-- TABLE VIEW -->
-    <div id="tableView" class="table-container">
-        <table id="contactTable">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Type</th>
-                    <th>Phone</th>
-                    <th>Message</th>
-                </tr>
-            </thead>
-            <tbody id="tableBody">
-                {% for c in contacts %}
-                <tr>
-                    <td><strong>{{ c.name }}</strong></td>
-                    <td>{{ c.email }}</td>
-                    <td>
-                        <span class="type-badge">{{ c.i_am_a|default:"General" }}</span>
-                    </td>
-                    <td>{{ c.phone|default:"—" }}</td>
-                    <td class="message-cell" title="{{ c.message }}">{{ c.message|default:"—" }}</td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="5">
-                        <div class="empty-state">
-                            <div class="empty-state-icon">📭</div>
-                            <h3>No contact submissions yet</h3>
-                            <p>Contact form submissions will appear here</p>
-                        </div>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <!-- Table View -->
+    <div id="tableView">
+        <div class="table-wrapper">
+            <table id="contactTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Type</th>
+                        <th>Phone</th>
+                        <th>Message</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    {% for c in contacts %}
+                    <tr>
+                        <td><strong>{{ c.name }}</strong></td>
+                        <td>{{ c.email }}</td>
+                        <td><span class="type-badge">{{ c.i_am_a|default:"General" }}</span></td>
+                        <td>{{ c.phone|default:"—" }}</td>
+                        <td class="message-cell" title="{{ c.message|escape }}">{{ c.message|default:"—" }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5">
+                            <div class="empty-state">
+                                <div class="empty-state-icon">📭</div>
+                                <h3>No messages yet</h3>
+                                <p>New contact submissions will appear here.</p>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 
-    <!-- GRID VIEW -->
+    <!-- Grid / Card View -->
     <div id="gridView" class="grid">
         {% for c in contacts %}
         <div class="card">
@@ -549,24 +528,21 @@
                 <h3 class="card-name">{{ c.name }}</h3>
                 <span class="card-type">{{ c.i_am_a|default:"General Contact" }}</span>
             </div>
-            
             <div class="card-body">
                 <div class="info-item">
-                    <div class="info-icon">📧</div>
+                    <div class="info-icon">✉️</div>
                     <div class="info-details">
                         <div class="info-label">Email</div>
                         <div class="info-value">{{ c.email }}</div>
                     </div>
                 </div>
-
                 <div class="info-item">
-                    <div class="info-icon">📞</div>
+                    <div class="info-icon">📱</div>
                     <div class="info-details">
                         <div class="info-label">Phone</div>
                         <div class="info-value">{{ c.phone|default:"Not provided" }}</div>
                     </div>
                 </div>
-
                 {% if c.message %}
                 <div class="message-box">
                     <div class="info-label">Message</div>
@@ -578,131 +554,103 @@
         {% empty %}
         <div class="empty-state" style="grid-column: 1 / -1;">
             <div class="empty-state-icon">📭</div>
-            <h3>No contact submissions yet</h3>
-            <p>Contact form submissions will appear here</p>
+            <h3>No messages yet</h3>
+            <p>New contact submissions will appear here.</p>
         </div>
         {% endfor %}
     </div>
 
-    <!-- PAGINATION -->
+    <!-- Pagination (only shown when needed) -->
     {% if contacts|length > 10 %}
     <div class="pagination" id="pagination">
-        <button class="pagination-btn" onclick="changePage(-1)" id="prevBtn">
-            ← Previous
-        </button>
+        <button class="pagination-btn" onclick="changePage(-1)" id="prevBtn">← Previous</button>
         <span class="page-info" id="pageInfo"></span>
-        <button class="pagination-btn" onclick="changePage(1)" id="nextBtn">
-            Next →
-        </button>
+        <button class="pagination-btn" onclick="changePage(1)" id="nextBtn">Next →</button>
     </div>
     {% endif %}
+
 </div>
 
-<!-- JAVASCRIPT -->
 <script>
-    let currentPage = 1;
-    const rowsPerPage = 10;
-    let allRows = [];
-    let filteredRows = [];
+// Your existing JavaScript (unchanged)
+let currentPage = 1;
+const rowsPerPage = 10;
+let allRows = [];
+let filteredRows = [];
 
-    function showTable() {
-        document.getElementById("tableView").style.display = "block";
-        document.getElementById("gridView").style.display = "none";
-        document.getElementById("tableBtn").classList.add("active");
-        document.getElementById("gridBtn").classList.remove("active");
-    }
+function showTable() {
+    document.getElementById("tableView").style.display = "block";
+    document.getElementById("gridView").style.display = "none";
+    document.getElementById("tableBtn").classList.add("active");
+    document.getElementById("gridBtn").classList.remove("active");
+}
 
-    function showGrid() {
-        document.getElementById("tableView").style.display = "none";
-        document.getElementById("gridView").style.display = "grid";
-        document.getElementById("gridBtn").classList.add("active");
-        document.getElementById("tableBtn").classList.remove("active");
-    }
+function showGrid() {
+    document.getElementById("tableView").style.display = "none";
+    document.getElementById("gridView").style.display = "grid";
+    document.getElementById("gridBtn").classList.add("active");
+    document.getElementById("tableBtn").classList.remove("active");
+}
 
-    function filterContacts() {
-        const input = document.getElementById("searchInput");
-        const filter = input.value.toLowerCase();
-        const table = document.getElementById("contactTable");
-        const tr = table.getElementsByTagName("tr");
-
-        for (let i = 1; i < tr.length; i++) {
-            const row = tr[i];
-            const text = row.textContent || row.innerText;
-            
-            if (text.toLowerCase().indexOf(filter) > -1) {
-                row.style.display = "";
-            } else {
-                row.style.display = "none";
-            }
-        }
-
-        // Filter grid view
-        const cards = document.querySelectorAll(".card");
-        cards.forEach(card => {
-            const text = card.textContent || card.innerText;
-            if (text.toLowerCase().indexOf(filter) > -1) {
-                card.style.display = "";
-            } else {
-                card.style.display = "none";
-            }
-        });
-    }
-
-    function initPagination() {
-        const tbody = document.getElementById('tableBody');
-        allRows = Array.from(tbody.getElementsByTagName('tr'));
-        filteredRows = allRows;
-        
-        // Only show pagination if there are actual rows
-        if (allRows.length === 1 && allRows[0].cells.length === 1) {
-            const pagination = document.getElementById('pagination');
-            if (pagination) pagination.style.display = 'none';
-            return;
-        }
-        
-        showPage(1);
-    }
-
-    function showPage(page) {
-        currentPage = page;
-        const tbody = document.getElementById('tableBody');
-        const start = (page - 1) * rowsPerPage;
-        const end = start + rowsPerPage;
-        
-        // Hide all rows
-        allRows.forEach(row => row.style.display = 'none');
-        
-        // Show only filtered rows for current page
-        filteredRows.slice(start, end).forEach(row => row.style.display = '');
-        
-        updatePaginationUI();
-    }
-
-    function updatePaginationUI() {
-        const totalPages = Math.ceil(filteredRows.length / rowsPerPage);
-        const pageInfo = document.getElementById('pageInfo');
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
-        
-        if (pageInfo) pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
-        if (prevBtn) prevBtn.disabled = currentPage === 1;
-        if (nextBtn) nextBtn.disabled = currentPage === totalPages || totalPages === 0;
-    }
-
-    function changePage(direction) {
-        const totalPages = Math.ceil(filteredRows.length / rowsPerPage);
-        const newPage = currentPage + direction;
-        
-        if (newPage >= 1 && newPage <= totalPages) {
-            showPage(newPage);
-        }
-    }
-
-    // Set default view to table on page load
-    document.addEventListener('DOMContentLoaded', function() {
-        showTable();
-        initPagination();
+function filterContacts() {
+    const input = document.getElementById("searchInput").value.toLowerCase();
+    
+    // Table filter
+    const tr = document.querySelectorAll("#contactTable tbody tr");
+    tr.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(input) ? "" : "none";
     });
+
+    // Grid filter
+    document.querySelectorAll(".card").forEach(card => {
+        const text = card.textContent.toLowerCase();
+        card.style.display = text.includes(input) ? "" : "none";
+    });
+}
+
+function initPagination() {
+    const tbody = document.getElementById('tableBody');
+    allRows = Array.from(tbody.querySelectorAll('tr:not(:only-child)')); // exclude empty state row if present
+    
+    if (allRows.length === 0) {
+        document.getElementById('pagination')?.style.display = 'none';
+        return;
+    }
+
+    filteredRows = allRows;
+    showPage(1);
+}
+
+function showPage(page) {
+    currentPage = page;
+    const start = (page - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+
+    allRows.forEach(r => r.style.display = 'none');
+    filteredRows.slice(start, end).forEach(r => r.style.display = '');
+
+    updatePaginationUI();
+}
+
+function updatePaginationUI() {
+    const totalPages = Math.ceil(filteredRows.length / rowsPerPage);
+    document.getElementById('pageInfo').textContent = `Page ${currentPage} of ${totalPages}`;
+    document.getElementById('prevBtn').disabled = currentPage === 1;
+    document.getElementById('nextBtn').disabled = currentPage === totalPages;
+}
+
+function changePage(dir) {
+    const totalPages = Math.ceil(filteredRows.length / rowsPerPage);
+    let newPage = currentPage + dir;
+    if (newPage >= 1 && newPage <= totalPages) showPage(newPage);
+}
+
+// Init
+document.addEventListener('DOMContentLoaded', () => {
+    showTable();
+    initPagination();
+});
 </script>
 
 {% endblock %}
