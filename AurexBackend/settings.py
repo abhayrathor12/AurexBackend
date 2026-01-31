@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-$4lhndfagabp799cg62okmm2kuy!6!b1kp37r1=kdn2-qukpm5
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["192.168.1.6"]
+ALLOWED_HOSTS = ["192.168.1.60","AurexBackend.pythonanywhere.com"]
 
 # Application definition
 
@@ -112,17 +112,19 @@ USE_I18N = True
 USE_TZ = True
 
 CORS_ALLOWED_ORIGINS = [
-    "https://technovizautomation.com",
-    "https://www.technovizautomation.com",
+    "https://www.aurexventures.in/",
+    "https://aurexventures.in/",
     "http://192.168.1.60:5173",
 ]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
+import os
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATIC_URL = 'static/'
-MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR / "media"
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
