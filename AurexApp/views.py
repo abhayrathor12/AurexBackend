@@ -7,6 +7,19 @@ from .models import StartupApplication,Contact,InvestorApplication
 from .serializers import StartupApplicationSerializer,InvestorApplicationSerializer,ContactSerializer
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
+from rest_framework import generics
+from .models import EventRegistration
+from .serializers import EventRegistrationSerializer
+from rest_framework.parsers import MultiPartParser, FormParser
+
+class EventRegistrationCreateView(generics.CreateAPIView):
+    queryset = EventRegistration.objects.all()
+    serializer_class = EventRegistrationSerializer
+
+
+class EventRegistrationListView(generics.ListAPIView):
+    queryset = EventRegistration.objects.all().order_by('-created_at')
+    serializer_class = EventRegistrationSerializer
 
 class StartupApplicationViewSet(viewsets.ModelViewSet):
     """
@@ -91,3 +104,28 @@ def investor_detail(request, pk):
     return render(request, "investor_detail.html", {
         "investor": investor
     })    
+    
+    
+class EventRegistrationCreateView(generics.CreateAPIView):
+
+    queryset = EventRegistration.objects.all()
+    serializer_class = EventRegistrationSerializer
+    parser_classes = (MultiPartParser, FormParser)
+
+    def perform_create(self, serializer):
+        serializer.save()
+        
+from django.views.generic import ListView, DetailView
+from .models import EventRegistration
+from .serializers import EventRegistrationSerializer  # if you still want API
+
+class EventRegistrationListView(ListView):
+    model = EventRegistration
+    template_name = "registrations.html"
+    context_object_name = "registrations"
+    ordering = ["-created_at"]
+
+class EventRegistrationDetailView(DetailView):
+    model = EventRegistration
+    template_name = "registration_detail.html"
+    context_object_name = "registration"

@@ -1,0 +1,264 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+    :root {
+        --primary: #1e3a5f;
+        --accent: #1e40af;
+        --red-accent: #b45309;
+        --light: #f8f9fa;
+        --border: #e5e7eb;
+        --text: #1f2937;
+        --text-light: #6b7280;
+    }
+    .detail-container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 14px;
+    }
+    .back-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin: 16px 0 20px;
+        color: var(--accent);
+        font-weight: 600;
+        text-decoration: none;
+    }
+    .back-btn:hover { color: #1e3a8a; gap: 12px; }
+    .header {
+        background: linear-gradient(135deg, var(--primary) 0%, #3b82f6 100%);
+        color: white;
+        padding: clamp(20px, 5vw, 28px);
+        border-radius: 12px;
+        margin-bottom: 24px;
+        box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+        position: relative;
+    }
+    .header h1 {
+        font-size: clamp(1.6rem, 6vw, 2.1rem);
+        margin-bottom: 8px;
+    }
+    .meta-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .meta-badge {
+        padding: 6px 14px;
+        background: rgba(255,255,255,0.18);
+        border-radius: 999px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        backdrop-filter: blur(6px);
+        border: 1px solid rgba(255,255,255,0.2);
+    }
+    .content-grid {
+        display: grid;
+        gap: 20px;
+    }
+    @media (min-width: 968px) { .content-grid { grid-template-columns: 2fr 1fr; } }
+    .section {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    .section-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 16px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #eff6ff;
+    }
+    .section-header h3 {
+        color: var(--primary);
+        font-size: 1.1rem;
+        margin: 0;
+    }
+    .info-row {
+        display: grid;
+        grid-template-columns: 160px 1fr;
+        gap: 12px;
+        padding: 10px 0;
+        border-bottom: 1px solid #f1f5f9;
+        align-items: start;
+    }
+    .info-row:last-child { border-bottom: none; }
+    .info-label {
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--text-light);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .info-value {
+        font-size: 0.95rem;
+        color: var(--text);
+        line-height: 1.5;
+    }
+    .yes { color: #059669; font-weight: 600; }
+    .no  { color: #dc2626; }
+    .pitch-section {
+        background: linear-gradient(135deg, #fefce8 0%, #fef3c7 100%);
+        padding: 20px;
+        border-radius: 12px;
+        border: 1px solid #fde68a;
+        text-align: center;
+    }
+    .pitch-section h3 { color: #92400e; margin-bottom: 12px; }
+    .download-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 28px;
+        background: #1e40af;
+        color: white;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+        box-shadow: 0 2px 6px rgba(30,64,175,0.2);
+    }
+    .download-btn:hover {
+        background: #1e3a8a;
+        transform: translateY(-2px);
+    }
+    .sidebar-section {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+    }
+    .sidebar-item {
+        padding: 10px 0;
+        border-bottom: 1px solid #f1f5f9;
+    }
+    .sidebar-item:last-child { border-bottom: none; }
+    .sidebar-label {
+        font-size: 0.78rem;
+        color: var(--text-light);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        margin-bottom: 4px;
+    }
+    .highlight-box {
+        background: #eff6ff;
+        padding: 16px;
+        border-radius: 10px;
+        text-align: center;
+        border: 2px solid #bfdbfe;
+        margin: 16px 0;
+    }
+    .highlight-amount {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: var(--accent);
+    }
+</style>
+
+<div class="detail-container">
+    <a href="{% url 'event-registrations' %}" class="back-btn">← Back to Registrations</a>
+
+    <div class="header">
+        <h1>{{ registration.name }}</h1>
+        <div class="meta-badges">
+            <span class="meta-badge">{{ registration.get_registering_as_display }}</span>
+            <span class="meta-badge">{{ registration.city|default:"—" }}</span>
+            <span class="meta-badge">{{ registration.get_pass_type_display }}</span>
+            {% if registration.interested_in_pitching %}
+            <span class="meta-badge" style="background:#fef3c7; color:#92400e;">Wants to Pitch</span>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="content-grid">
+        <!-- MAIN CONTENT -->
+        <div>
+            <div class="section">
+                <div class="section-header">
+                    <span style="font-size:1.4rem;">👤</span>
+                    <h3>Personal & Contact Info</h3>
+                </div>
+                <div class="info-row"><span class="info-label">Email</span><span class="info-value"><a href="mailto:{{ registration.email }}">{{ registration.email }}</a></span></div>
+                <div class="info-row"><span class="info-label">Phone</span><span class="info-value"><a href="tel:{{ registration.contact_number }}">{{ registration.contact_number }}</a></span></div>
+                <div class="info-row"><span class="info-label">Organization</span><span class="info-value">{{ registration.organization_name|default:"—" }}</span></div>
+                <div class="info-row"><span class="info-label">City</span><span class="info-value">{{ registration.city|default:"—" }}</span></div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <span style="font-size:1.4rem;">🚀</span>
+                    <h3>Startup / Project Details</h3>
+                </div>
+                <div class="info-row"><span class="info-label">Stage</span><span class="info-value">{{ registration.get_startup_stage_display|default:"—" }}</span></div>
+                <div class="info-row"><span class="info-label">Industry</span><span class="info-value">{{ registration.industry|default:"—" }}</span></div>
+                <div class="info-row"><span class="info-label">Brief</span><span class="info-value">{{ registration.startup_brief|linebreaksbr|default:"—" }}</span></div>
+                <div class="info-row"><span class="info-label">Bootstrapped</span><span class="info-value">{% if registration.bootstrapped %}Yes{% else %}No{% endif %}</span></div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <span style="font-size:1.4rem;">💰</span>
+                    <h3>Financial Snapshot</h3>
+                </div>
+                <div class="info-row"><span class="info-label">Capital Invested</span><span class="info-value">₹ {{ registration.total_capital_invested|default:"0"|floatformat:0 }}</span></div>
+                <div class="info-row"><span class="info-label">Monthly Revenue</span><span class="info-value">₹ {{ registration.monthly_revenue|default:"0"|floatformat:0 }}</span></div>
+                <div class="info-row"><span class="info-label">Monthly Burn</span><span class="info-value">₹ {{ registration.monthly_burn_rate|default:"0"|floatformat:0 }}</span></div>
+
+                {% if registration.amount_to_raise %}
+                <div class="highlight-box">
+                    <div style="font-size:0.85rem; color:#6b7280; font-weight:600; text-transform:uppercase; letter-spacing:0.5px;">Target Raise</div>
+                    <div class="highlight-amount">₹ {{ registration.amount_to_raise|floatformat:0 }}</div>
+                </div>
+                {% endif %}
+            </div>
+
+            {% if registration.interested_in_pitching %}
+            <div class="pitch-section">
+                <h3>Pitching Interest</h3>
+                {% if registration.pitch_deck_file %}
+                <a href="{{ registration.pitch_deck_file.url }}" target="_blank" class="download-btn">
+                    ⬇ Download Pitch Deck
+                </a>
+                {% elif registration.pitch_deck_link %}
+                <a href="{{ registration.pitch_deck_link }}" target="_blank" class="download-btn" style="background:#059669;">
+                    🔗 View Pitch Deck Online
+                </a>
+                {% else %}
+                <p style="color:#6b7280; margin:12px 0 0;">No pitch deck provided</p>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- SIDEBAR -->
+        <div>
+            <div class="sidebar-section">
+                <h3 style="margin:0 0 16px; color:var(--primary);">Quick Summary</h3>
+                <div class="sidebar-item">
+                    <span class="sidebar-label">Pass Type</span>
+                    <div style="font-weight:600;">{{ registration.get_pass_type_display }}</div>
+                </div>
+                <div class="sidebar-item">
+                    <span class="sidebar-label">Registering As</span>
+                    <div style="font-weight:600;">{{ registration.get_registering_as_display }}</div>
+                </div>
+                <div class="sidebar-item">
+                    <span class="sidebar-label">Wants to Pitch</span>
+                    <div style="font-weight:600;" class="{% if registration.interested_in_pitching %}yes{% else %}no{% endif %}">
+                        {% if registration.interested_in_pitching %}YES{% else %}No{% endif %}
+                    </div>
+                </div>
+                <div class="sidebar-item">
+                    <span class="sidebar-label">Registered</span>
+                    <div style="font-weight:500;">{{ registration.created_at|date:"d M Y – H:i" }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

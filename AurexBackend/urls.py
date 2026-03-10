@@ -27,5 +27,8 @@ urlpatterns = [
     path("startups/<int:pk>/", startup_detail, name="startup_detail"),
     path("investor_list", investor_list, name="investor_list"),
     path("investors/<int:pk>/", investor_detail, name="investor_detail"),
+        # urls.py
+path('registrations/', EventRegistrationListView.as_view(), name='event-registrations'),
+path('registrations/<int:pk>/', EventRegistrationDetailView.as_view(), name='registration_detail'),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

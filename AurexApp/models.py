@@ -98,3 +98,71 @@ class Contact(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.email}"
+    
+
+
+
+class EventRegistration(models.Model):
+
+    REGISTERING_AS = [
+        ('founder', 'Startup Founder'),
+        ('cofounder', 'Co-founder'),
+        ('attendee', 'General Attendee'),
+    ]
+
+    STARTUP_STAGE = [
+        ('idea', 'Idea Stage'),
+        ('mvp', 'MVP Stage'),
+        ('early', 'Early Revenue'),
+        ('growth', 'Growth Stage'),
+    ]
+
+    FUNDING_STAGE = [
+        ('pre_seed', 'Pre-Seed'),
+        ('seed', 'Seed'),
+        ('bridge', 'Bridge'),
+        ('pre_series_a', 'Pre-Series A'),
+        ('series_a', 'Series A'),
+        ('series_b', 'Series B+'),
+    ]
+
+    PASS_TYPE = [
+        ('event', 'Event Registration Pass – ₹699'),
+        ('pitch', 'Pitching Pass – ₹1499'),
+    ]
+
+    name = models.CharField(max_length=200)
+    email = models.EmailField()
+    contact_number = models.CharField(max_length=20)
+    organization_name = models.CharField(max_length=255)
+    city = models.CharField(max_length=150)
+
+    registering_as = models.CharField(max_length=50, choices=REGISTERING_AS)
+
+    startup_stage = models.CharField(max_length=50, choices=STARTUP_STAGE)
+    industry = models.CharField(max_length=255)
+
+    startup_brief = models.TextField()
+
+    bootstrapped = models.BooleanField()
+
+    total_capital_invested = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)
+    monthly_revenue = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)
+    monthly_burn_rate = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)
+
+    amount_to_raise = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)
+
+    funding_stage = models.CharField(max_length=50, choices=FUNDING_STAGE)
+
+    interested_in_pitching = models.BooleanField()
+
+    pitch_deck_link = models.URLField(blank=True, null=True)
+
+    pitch_deck_file = models.FileField(upload_to='pitch_decks/', null=True, blank=True)
+
+    pass_type = models.CharField(max_length=50, choices=PASS_TYPE)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name

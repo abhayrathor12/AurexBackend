@@ -1,0 +1,304 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+    /* ──────────────────────────────────────────────
+       Almost identical styling to your startup list
+       Only changed texts, classes, colors slightly where needed
+    ────────────────────────────────────────────── */
+    * { margin:0; padding:0; box-sizing:border-box; }
+    .container {
+        max-width: 1440px;
+        margin: 0 auto;
+        padding: 0 14px;
+    }
+    .header {
+        background: linear-gradient(135deg, #1e3a5f 0%, #2c5282 100%);
+        padding: clamp(18px, 5vw, 24px) clamp(20px, 6vw, 32px);
+        border-radius: 12px;
+        margin: 20px 0 24px;
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+        flex-wrap: wrap;
+    }
+    .header-left h1 {
+        font-size: clamp(1.45rem, 5.5vw, 1.75rem);
+        font-weight: 700;
+        margin-bottom: 6px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .controls {
+        background: white;
+        padding: 16px;
+        border-radius: 12px;
+        margin-bottom: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+        border: 1px solid #e5e7eb;
+    }
+    @media (min-width: 640px) {
+        .controls { flex-direction: row; align-items: center; justify-content: space-between; }
+    }
+    .search-box { position: relative; }
+    .search-box input {
+        width: 100%;
+        padding: 12px 44px 12px 16px;
+        border: 2px solid #e5e7eb;
+        border-radius: 10px;
+        font-size: clamp(0.95rem, 3.5vw, 1rem);
+    }
+    .search-box input:focus {
+        outline: none;
+        border-color: #1e40af;
+        box-shadow: 0 0 0 3px rgba(30,64,175,0.12);
+    }
+    .search-icon {
+        position: absolute;
+        right: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #6b7280;
+        font-size: 1.2rem;
+    }
+    .view-toggle {
+        display: flex;
+        background: #f8f9fa;
+        padding: 4px;
+        border-radius: 10px;
+        align-self: center;
+    }
+    .view-btn {
+        padding: 10px 18px;
+        border: none;
+        background: transparent;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: clamp(0.9rem, 3.4vw, 0.95rem);
+        color: #4b5563;
+        min-width: 90px;
+        transition: all 0.2s;
+    }
+    .view-btn.active {
+        background: white;
+        color: #1e40af;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .table-wrapper { overflow-x: auto; background: white; border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); border: 1px solid #e5e7eb; }
+    table { width: 100%; border-collapse: collapse; min-width: 900px; font-size: 0.92rem; }
+    th, td { padding: 12px 14px; text-align: left; }
+    thead { background: linear-gradient(135deg, #1e3a5f 0%, #2c5282 100%); }
+    th { color: white; font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.4px; white-space: nowrap; }
+    td { border-bottom: 1px solid #f1f5f9; color: #1f2937; }
+    tbody tr { cursor: pointer; transition: background 0.15s; }
+    tbody tr:hover { background: #eff6ff; }
+    .badge {
+        display: inline-block;
+        padding: 5px 10px;
+        border-radius: 6px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+    .badge-founder     { background: #dbeafe; color: #1e40af; }
+    .badge-cofounder   { background: #d1fae5; color: #065f46; }
+    .badge-attendee    { background: #f3f4f6; color: #4b5563; }
+    .badge-pitch       { background: #fef3c7; color: #92400e; }
+    .grid { display: none; grid-template-columns: 1fr; gap: 18px; }
+    @media (min-width: 640px) { .grid { grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); } }
+    .card {
+        background: white;
+        border-radius: 12px;
+        border: 1px solid #e5e7eb;
+        box-shadow: 0 2px 8px rgba(30,64,175,0.07);
+        overflow: hidden;
+        transition: all 0.25s ease;
+        cursor: pointer;
+    }
+    .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 20px rgba(30,64,175,0.14);
+        border-color: #1e40af;
+    }
+    .card-header {
+        padding: 18px;
+        background: linear-gradient(135deg, #1e3a5f 0%, #2c5282 100%);
+        color: white;
+    }
+    .card-title { font-size: clamp(1.05rem, 4.2vw, 1.15rem); font-weight: 700; margin-bottom: 8px; }
+    .card-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+    .stage-badge, .type-badge {
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        background: rgba(255,255,255,0.22);
+        backdrop-filter: blur(6px);
+        text-transform: uppercase;
+        color: white;
+    }
+    .empty-state { text-align: center; padding: 70px 20px; color: #6b7280; }
+    .empty-state-icon { font-size: clamp(3.5rem, 12vw, 4.5rem); margin-bottom: 16px; opacity: 0.45; }
+</style>
+
+<div class="container">
+    <div class="header">
+        <div class="header-left">
+            <h1>🎟️ Event Registrations</h1>
+            <p>Manage event sign-ups, pitching applications & attendee details</p>
+        </div>
+    </div>
+
+    <div class="controls">
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search by name, email, startup, city..." onkeyup="filterRegistrations()">
+            <span class="search-icon">🔍</span>
+        </div>
+        <div class="view-toggle">
+            <button id="tableBtn" class="view-btn active" onclick="showTable()">📋 Table</button>
+            <button id="gridBtn" class="view-btn" onclick="showGrid()">🎴 Cards</button>
+        </div>
+    </div>
+
+    <!-- TABLE VIEW -->
+    <div id="tableView">
+        <div class="table-wrapper">
+            <table id="registrationTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Registering As</th>
+                        <th>Startup / Org</th>
+                        <th>City</th>
+                        <th>Pass Type</th>
+                        <th>Pitching?</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for reg in registrations %}
+                    <tr onclick="window.location='{% url 'registration_detail' reg.id %}'">
+                        <td><strong>{{ reg.name }}</strong></td>
+                        <td>{{ reg.email }}</td>
+                        <td>{{ reg.contact_number }}</td>
+                        <td>
+                            <span class="badge badge-{{ reg.registering_as }}">
+                                {{ reg.get_registering_as_display }}
+                            </span>
+                        </td>
+                        <td>{{ reg.organization_name|default:"—" }}</td>
+                        <td>{{ reg.city|default:"—" }}</td>
+                        <td>
+                            {% if reg.pass_type == 'pitch' %}
+                                <span class="badge badge-pitch">Pitching Pass</span>
+                            {% else %}
+                                <span class="badge">Event Pass</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if reg.interested_in_pitching %}
+                                <strong style="color:#b45309;">Yes</strong>
+                            {% else %}
+                                —
+                            {% endif %}
+                        </td>
+                        <td>{{ reg.created_at|date:"d M Y" }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="9">
+                            <div class="empty-state">
+                                <div class="empty-state-icon">📭</div>
+                                <h3>No registrations yet</h3>
+                                <p>New sign-ups will appear here</p>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- GRID / CARDS VIEW -->
+    <div id="gridView" class="grid">
+        {% for reg in registrations %}
+        <div class="card" onclick="window.location='{% url 'registration_detail' reg.id %}'">
+            <div class="card-header">
+                <h3 class="card-title">{{ reg.name }}</h3>
+                <div class="card-meta">
+                    <span class="type-badge">{{ reg.get_registering_as_display }}</span>
+                    <span class="stage-badge">{{ reg.city|default:"—" }}</span>
+                </div>
+            </div>
+            <div class="card-body" style="padding:18px;">
+                <div style="display:grid; gap:12px; margin-bottom:16px;">
+                    <div style="display:flex; gap:10px; align-items:center;">
+                        <div style="width:36px;height:36px;background:#1e3a5f;color:white;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;">📧</div>
+                        <div>
+                            <div style="color:#6b7280;font-size:0.78rem;font-weight:600;">EMAIL</div>
+                            <div style="font-weight:500;">{{ reg.email }}</div>
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:10px; align-items:center;">
+                        <div style="width:36px;height:36px;background:#1e3a5f;color:white;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;">📞</div>
+                        <div>
+                            <div style="color:#6b7280;font-size:0.78rem;font-weight:600;">PHONE</div>
+                            <div style="font-weight:500;">{{ reg.contact_number }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div style="background:#eff6ff; padding:12px; border-radius:10px; text-align:center; border:1px solid #bfdbfe;">
+                    <div style="color:#6b7280;font-size:0.78rem;font-weight:600;">PASS TYPE</div>
+                    <div style="font-size:1.3rem; font-weight:800; color:#1e40af;">
+                        {% if reg.pass_type == 'pitch' %}Pitching – ₹1499{% else %}Event – ₹699{% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="empty-state" style="grid-column:1/-1;">
+            <div class="empty-state-icon">📭</div>
+            <h3>No registrations found</h3>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+function showTable() {
+    document.getElementById("tableView").style.display = "block";
+    document.getElementById("gridView").style.display = "none";
+    document.getElementById("tableBtn").classList.add("active");
+    document.getElementById("gridBtn").classList.remove("active");
+}
+function showGrid() {
+    document.getElementById("tableView").style.display = "none";
+    document.getElementById("gridView").style.display = "grid";
+    document.getElementById("gridBtn").classList.add("active");
+    document.getElementById("tableBtn").classList.remove("active");
+}
+function filterRegistrations() {
+    const filter = document.getElementById("searchInput").value.toLowerCase();
+    document.querySelectorAll("#registrationTable tr").forEach((row, i) => {
+        if (i === 0) return;
+        row.style.display = row.textContent.toLowerCase().includes(filter) ? "" : "none";
+    });
+    document.querySelectorAll(".card").forEach(card => {
+        card.style.display = card.textContent.toLowerCase().includes(filter) ? "" : "none";
+    });
+}
+document.addEventListener('DOMContentLoaded', showTable);
+</script>
+
+{% endblock %}
