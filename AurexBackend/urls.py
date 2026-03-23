@@ -30,5 +30,7 @@ urlpatterns = [
         # urls.py
 path('registrations/', EventRegistrationListView.as_view(), name='event-registrations'),
 path('registrations/<int:pk>/', EventRegistrationDetailView.as_view(), name='registration_detail'),
+
+path('registrations/<int:pk>/delete/', EventRegistrationDeleteView.as_view(), name='registration_delete'),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

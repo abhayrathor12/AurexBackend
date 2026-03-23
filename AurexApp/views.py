@@ -129,3 +129,10 @@ class EventRegistrationDetailView(DetailView):
     model = EventRegistration
     template_name = "registration_detail.html"
     context_object_name = "registration"
+    
+from django.urls import reverse_lazy
+from django.views.generic import DeleteView
+    
+class EventRegistrationDeleteView(DeleteView):
+    model = EventRegistration
+    success_url = reverse_lazy('event-registrations')
