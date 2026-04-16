@@ -8,7 +8,7 @@ router = DefaultRouter()
 router.register(r"startups", StartupApplicationViewSet, basename="startups")
 router.register(r"investors", InvestorApplicationViewSet, basename="investors")
 router.register(r'contacts', ContactViewSet, basename='contact')
-
+router.register(r'registrations', WebinarRegistrationViewSet, basename='registrations')
 urlpatterns = [
     path("", include(router.urls)),
     path("con/create/", ContactCreateView.as_view(), name="contact_create"),

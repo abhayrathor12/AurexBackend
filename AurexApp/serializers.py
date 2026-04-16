@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import StartupApplication,Contact,InvestorApplication,EventRegistration
+from .models import StartupApplication,Contact,InvestorApplication,EventRegistration,WebinarRegistration
 
 
 
@@ -41,3 +41,8 @@ class EventRegistrationSerializer(serializers.ModelSerializer):
         if isinstance(value, str):
             return value.lower() == "true"
         return value
+    
+class WebinarRegistrationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WebinarRegistration
+        fields = "__all__"

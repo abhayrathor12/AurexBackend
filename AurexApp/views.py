@@ -8,7 +8,7 @@ from .serializers import StartupApplicationSerializer,InvestorApplicationSeriali
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework import generics
-from .models import EventRegistration
+from .models import EventRegistration,WebinarRegistration
 from .serializers import EventRegistrationSerializer
 from rest_framework.parsers import MultiPartParser, FormParser
 
@@ -47,10 +47,6 @@ class ContactCreateView(APIView):
         if serializer.is_valid():
             contact = serializer.save()
 
-            
-
-            
-            
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
@@ -136,3 +132,68 @@ from django.views.generic import DeleteView
 class EventRegistrationDeleteView(DeleteView):
     model = EventRegistration
     success_url = reverse_lazy('event-registrations')
+    
+    
+from rest_framework import viewsets, status
+from rest_framework.response import Response
+from rest_framework.decorators import action
+from .models import WebinarRegistration
+from .serializers import WebinarRegistrationSerializer
+
+
+class WebinarRegistrationViewSet(viewsets.ModelViewSet):
+    queryset = WebinarRegistration.objects.all().order_by('-created_at')
+    serializer_class = WebinarRegistrationSerializer
+
+    # ✅ CREATE (Register user)
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(
+                {"message": "Registration successful", "data": serializer.data},
+                status=status.HTTP_201_CREATED
+            )
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    # ✅ GET ALL (List)
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+    # ✅ MARK ATTENDED
+    @action(detail=True, methods=['patch'])
+    def mark_attended(self, request, pk=None):
+        registration = self.get_object()
+
+        # 🔥 get value from request
+        attended_value = request.data.get("attended")
+
+        # if not provided → default True
+        if attended_value is None:
+            attended_value = True
+
+        registration.attended = attended_value
+        registration.save()
+
+        return Response({
+            "message": "Attendance updated",
+            "id": registration.id,
+            "attended": registration.attended
+        })
+    @action(detail=False, methods=['post'])
+    def delete_multiple(self, request):
+        ids = request.data.get("ids", [])
+
+        if not ids:
+            return Response({"error": "No IDs provided"}, status=status.HTTP_400_BAD_REQUEST)
+
+        deleted_count, _ = WebinarRegistration.objects.filter(id__in=ids).delete()
+
+        return Response({
+            "message": f"{deleted_count} records deleted successfully"
+        }, status=status.HTTP_200_OK)
+def webinar_list(request):
+    Webinar = WebinarRegistration.objects.all().order_by("-id")  # latest first
+    return render(request, "webinar_contact.html", {"registrations": Webinar})

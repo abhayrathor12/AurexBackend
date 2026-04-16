@@ -24,6 +24,7 @@ urlpatterns = [
     path("api/", include("AurexApp.urls")),
     path("", contact_list, name="contact_list"),
     path("startup_list", startup_list, name="startup_list"),
+    path("webinar_list", webinar_list, name="webinar_list"),
     path("startups/<int:pk>/", startup_detail, name="startup_detail"),
     path("investor_list", investor_list, name="investor_list"),
     path("investors/<int:pk>/", investor_detail, name="investor_detail"),

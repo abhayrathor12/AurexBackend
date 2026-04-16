@@ -166,7 +166,7 @@
     table {
         width: 100%;
         border-collapse: collapse;
-        min-width: 720px;          /* forces horizontal scroll on small screens */
+        min-width: 720px;
         font-size: 0.94rem;
     }
 
@@ -214,9 +214,8 @@
         white-space: nowrap;
     }
 
-    /* GRID */
+    /* GRID — ✅ FIXED: removed duplicate "display: grid" that was overriding JS toggle */
     .grid {
-        display: grid;
         grid-template-columns: 1fr;
         gap: 18px;
         display: none;
@@ -388,10 +387,7 @@
         margin-bottom: 12px;
     }
 
-    /* ──────────────────────────────────────────────
-       EXTRA RESPONSIVE TWEAKS
-    ────────────────────────────────────────────── */
-
+    /* RESPONSIVE TWEAKS */
     @media (max-width: 480px) {
         .container {
             padding: 0 12px;
@@ -572,85 +568,89 @@
 </div>
 
 <script>
-// Your existing JavaScript (unchanged)
-let currentPage = 1;
-const rowsPerPage = 10;
-let allRows = [];
-let filteredRows = [];
+    let currentPage = 1;
+    const rowsPerPage = 10;
+    let allRows = [];
+    let filteredRows = [];
 
-function showTable() {
-    document.getElementById("tableView").style.display = "block";
-    document.getElementById("gridView").style.display = "none";
-    document.getElementById("tableBtn").classList.add("active");
-    document.getElementById("gridBtn").classList.remove("active");
-}
-
-function showGrid() {
-    document.getElementById("tableView").style.display = "none";
-    document.getElementById("gridView").style.display = "grid";
-    document.getElementById("gridBtn").classList.add("active");
-    document.getElementById("tableBtn").classList.remove("active");
-}
-
-function filterContacts() {
-    const input = document.getElementById("searchInput").value.toLowerCase();
-    
-    // Table filter
-    const tr = document.querySelectorAll("#contactTable tbody tr");
-    tr.forEach(row => {
-        const text = row.textContent.toLowerCase();
-        row.style.display = text.includes(input) ? "" : "none";
-    });
-
-    // Grid filter
-    document.querySelectorAll(".card").forEach(card => {
-        const text = card.textContent.toLowerCase();
-        card.style.display = text.includes(input) ? "" : "none";
-    });
-}
-
-function initPagination() {
-    const tbody = document.getElementById('tableBody');
-    allRows = Array.from(tbody.querySelectorAll('tr:not(:only-child)')); // exclude empty state row if present
-    
-    if (allRows.length === 0) {
-        document.getElementById('pagination')?.style.display = 'none';
-        return;
+    function showTable() {
+        document.getElementById("tableView").style.display = "block";
+        document.getElementById("gridView").style.display = "none";
+        document.getElementById("tableBtn").classList.add("active");
+        document.getElementById("gridBtn").classList.remove("active");
     }
 
-    filteredRows = allRows;
-    showPage(1);
-}
+    function showGrid() {
+        document.getElementById("tableView").style.display = "none";
+        document.getElementById("gridView").style.display = "grid";
+        document.getElementById("gridBtn").classList.add("active");
+        document.getElementById("tableBtn").classList.remove("active");
+    }
 
-function showPage(page) {
-    currentPage = page;
-    const start = (page - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
+    function filterContacts() {
+        const input = document.getElementById("searchInput").value.toLowerCase();
 
-    allRows.forEach(r => r.style.display = 'none');
-    filteredRows.slice(start, end).forEach(r => r.style.display = '');
+        // Table filter
+        const tr = document.querySelectorAll("#contactTable tbody tr");
+        tr.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            row.style.display = text.includes(input) ? "" : "none";
+        });
 
-    updatePaginationUI();
-}
+        // Grid filter
+        document.querySelectorAll(".card").forEach(card => {
+            const text = card.textContent.toLowerCase();
+            card.style.display = text.includes(input) ? "" : "none";
+        });
+    }
 
-function updatePaginationUI() {
-    const totalPages = Math.ceil(filteredRows.length / rowsPerPage);
-    document.getElementById('pageInfo').textContent = `Page ${currentPage} of ${totalPages}`;
-    document.getElementById('prevBtn').disabled = currentPage === 1;
-    document.getElementById('nextBtn').disabled = currentPage === totalPages;
-}
+    function initPagination() {
+        const tbody = document.getElementById('tableBody');
+        if (!tbody) return;
 
-function changePage(dir) {
-    const totalPages = Math.ceil(filteredRows.length / rowsPerPage);
-    let newPage = currentPage + dir;
-    if (newPage >= 1 && newPage <= totalPages) showPage(newPage);
-}
+        allRows = Array.from(tbody.querySelectorAll('tr')).filter(row => {
+            return !row.querySelector('.empty-state');
+        });
 
-// Init
-document.addEventListener('DOMContentLoaded', () => {
-    showTable();
-    initPagination();
-});
+        if (allRows.length === 0) {
+            const pagination = document.getElementById('pagination');
+            if (pagination) pagination.style.display = 'none';
+            return;
+        }
+
+        filteredRows = allRows;
+        showPage(1);
+    }
+
+    function showPage(page) {
+        currentPage = page;
+        const start = (page - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+
+        allRows.forEach(r => r.style.display = 'none');
+        filteredRows.slice(start, end).forEach(r => r.style.display = '');
+
+        updatePaginationUI();
+    }
+
+    function updatePaginationUI() {
+        const totalPages = Math.ceil(filteredRows.length / rowsPerPage);
+        document.getElementById('pageInfo').textContent = `Page ${currentPage} of ${totalPages}`;
+        document.getElementById('prevBtn').disabled = currentPage === 1;
+        document.getElementById('nextBtn').disabled = currentPage === totalPages;
+    }
+
+    function changePage(dir) {
+        const totalPages = Math.ceil(filteredRows.length / rowsPerPage);
+        let newPage = currentPage + dir;
+        if (newPage >= 1 && newPage <= totalPages) showPage(newPage);
+    }
+
+    // Init on load
+    document.addEventListener('DOMContentLoaded', () => {
+        showTable();
+        initPagination();
+    });
 </script>
 
 {% endblock %}

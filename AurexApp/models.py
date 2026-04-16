@@ -166,3 +166,19 @@ class EventRegistration(models.Model):
 
     def __str__(self):
         return self.name
+    
+    
+class WebinarRegistration(models.Model):
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    company_name = models.CharField(max_length=150)
+    email = models.EmailField()
+    phone = models.CharField(max_length=15)
+
+    city = models.CharField(max_length=100,null=True,blank=True)  # ✅ NEW
+    attended = models.BooleanField(default=False)  # ✅ NEW
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name} - {self.email}"
