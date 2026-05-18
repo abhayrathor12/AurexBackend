@@ -179,6 +179,10 @@ class WebinarRegistration(models.Model):
     attended = models.BooleanField(default=False)  # ✅ NEW
 
     created_at = models.DateTimeField(auto_now_add=True)
-
+    payment_id = models.CharField(
+    max_length=200,
+    blank=True,
+    null=True
+)
     def __str__(self):
         return f"{self.first_name} {self.last_name} - {self.email}"

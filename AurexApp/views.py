@@ -11,7 +11,14 @@ from rest_framework import generics
 from .models import EventRegistration,WebinarRegistration
 from .serializers import EventRegistrationSerializer
 from rest_framework.parsers import MultiPartParser, FormParser
-
+import razorpay
+import json
+from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
+client = razorpay.Client(auth=(
+    settings.RAZORPAY_KEY_ID,
+    settings.RAZORPAY_KEY_SECRET
+))
 class EventRegistrationCreateView(generics.CreateAPIView):
     queryset = EventRegistration.objects.all()
     serializer_class = EventRegistrationSerializer
@@ -197,3 +204,68 @@ class WebinarRegistrationViewSet(viewsets.ModelViewSet):
 def webinar_list(request):
     Webinar = WebinarRegistration.objects.all().order_by("-id")  # latest first
     return render(request, "webinar_contact.html", {"registrations": Webinar})
+
+from rest_framework.views import APIView
+
+class CreateOrderView(APIView):
+
+    def post(self, request):
+
+        amount = 100  # ₹299 in paise
+
+        order = client.order.create({
+            "amount": amount,
+            "currency": "INR",
+            "payment_capture": 1
+        })
+
+        return Response({
+            "order_id": order["id"],
+            "amount": amount,
+            "key": settings.RAZORPAY_KEY_ID
+        })
+        
+        
+class VerifyPaymentView(APIView):
+
+    def post(self, request):
+
+        data = request.data
+
+        params_dict = {
+            "razorpay_order_id": data.get("razorpay_order_id"),
+            "razorpay_payment_id": data.get("razorpay_payment_id"),
+            "razorpay_signature": data.get("razorpay_signature")
+        }
+
+        try:
+
+            client.utility.verify_payment_signature(params_dict)
+
+            registration_data = data.get("registration_data")
+
+            serializer = WebinarRegistrationSerializer(
+                data=registration_data
+            )
+
+            if serializer.is_valid():
+                serializer.save(
+                    payment_id=data.get("razorpay_payment_id")
+                )
+
+                return Response({
+                    "success": True,
+                    "message": "Payment verified & registration saved"
+                })
+
+            return Response({
+                "success": False,
+                "errors": serializer.errors
+            })
+
+        except Exception as e:
+
+            return Response({
+                "success": False,
+                "message": str(e)
+            }, status=400)

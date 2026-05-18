@@ -15,5 +15,6 @@ urlpatterns = [
 
     path('register/', EventRegistrationCreateView.as_view(), name='event-register'),
 
-
+path("create-order/", CreateOrderView.as_view()),
+path("verify-payment/", VerifyPaymentView.as_view()),
 ]

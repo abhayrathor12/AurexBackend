@@ -15,7 +15,14 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+from pathlib import Path
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
+
+RAZORPAY_KEY_ID = os.getenv("RAZORPAY_KEY_ID")
+RAZORPAY_KEY_SECRET = os.getenv("RAZORPAY_KEY_SECRET")
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
@@ -115,6 +122,7 @@ CORS_ALLOWED_ORIGINS = [
     "https://www.aurexventures.in/",
     "https://aurexventures.in/",
     "http://192.168.1.60:5173",
+    "https://www.technovizautomation.com/",
 ]
 
 # Static files (CSS, JavaScript, Images)
