@@ -204,14 +204,22 @@ class WebinarRegistrationViewSet(viewsets.ModelViewSet):
 def webinar_list(request):
     Webinar = WebinarRegistration.objects.all().order_by("-id")  # latest first
     return render(request, "webinar_contact.html", {"registrations": Webinar})
-
+from datetime import date
 from rest_framework.views import APIView
+from rest_framework.response import Response
+
 
 class CreateOrderView(APIView):
 
     def post(self, request):
 
-        amount = 100  # ₹299 in paise
+        today = date.today()
+
+        # Before or on 22 May = ₹299
+        if today <= date(today.year, 5, 22):
+            amount = 29900   # Razorpay uses paise
+        else:
+            amount = 49900
 
         order = client.order.create({
             "amount": amount,
@@ -224,8 +232,8 @@ class CreateOrderView(APIView):
             "amount": amount,
             "key": settings.RAZORPAY_KEY_ID
         })
-        
-        
+
+
 class VerifyPaymentView(APIView):
 
     def post(self, request):
