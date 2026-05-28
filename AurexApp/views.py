@@ -213,13 +213,9 @@ class CreateOrderView(APIView):
 
     def post(self, request):
 
-        today = date.today()
 
-        # Before or on 22 May = ₹299
-        if today <= date(today.year, 5, 22):
-            amount = 29900   # Razorpay uses paise
-        else:
-            amount = 49900
+      
+        amount = 29900
 
         order = client.order.create({
             "amount": amount,
