@@ -213,9 +213,8 @@ class CreateOrderView(APIView):
 
     def post(self, request):
 
-
       
-        amount = 29900
+        amount = 9900
 
         order = client.order.create({
             "amount": amount,
